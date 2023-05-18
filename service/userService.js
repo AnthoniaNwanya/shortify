@@ -15,54 +15,63 @@ const create = async (data) => {
 };
 
 const getUsers = async (data) => {
-        const users = await UserSchema.find({});
-        if(!users) {
-              throw new NotFoundError("Users not found");
-        }
-        return users;
+    const users = await UserSchema.find({});
+    if (!users) {
+        throw new NotFoundError("Users not found");
+    }
+    return users;
 };
 
 const getOne = async (email) => {
     if (!email) {
         throw new ValidationError("email is required")
     }
-    const foundUser = await UserSchema.findOne({ "email": email });
+    let foundUser = await UserSchema.findOne({ "email": email });
     if (!foundUser) {
         throw new NotFoundError("User not found")
     }
+
+    return foundUser
+};
+
+const getHistory = async (email) => {
+    if (!email) {
+        throw new ValidationError("email is required")
+    }
+    let foundUser = await UserSchema.findOne({ "email": email });
+    if (!foundUser) {
+        throw new NotFoundError("User not found")
+    }
+    foundUser = foundUser.URLS;
     return foundUser
 };
 
 const updateOne = async (id, userUpdate) => {
-    const user = await UserSchema.findOne({ "id": id });
-    if (!user) {
-        throw new NotFoundError("User not found")
-    }
-    const update = await UserSchema.findByIdAndUpdate(user, userUpdate, {
+    const update = await UserSchema.findByIdAndUpdate(id, userUpdate, {
         new: true,
     });
-    if (!update) {
+    update.updatedAt = new Date();
+    await update.save();
+
+    if (!update || id === undefined) {
         throw new BadRequestError("Unable to update user");
     }
     return update;
 };
 
 const deleteOne = async (id) => {
-        const user = await UserSchema.findOne({ "id": id });
-        if (!user) {
-            throw new NotFoundError("User not found")
-        }
-        const deletedUser = await UserSchema.findByIdAndDelete(user);
-        if (!user) {
-            throw new BadRequestError("Unable to delete user");
-        }
-        return deletedUser
+    const deletedUser = await UserSchema.findByIdAndDelete(id);
+    if (!deletedUser) {
+        throw new BadRequestError("Unable to delete user");
+    }
+    return deletedUser
 
 };
 module.exports = {
     create,
     getUsers,
     getOne,
+    getHistory,
     updateOne,
     deleteOne,
 };

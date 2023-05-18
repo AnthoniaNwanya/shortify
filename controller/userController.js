@@ -1,16 +1,15 @@
 const service = require("../service/userService");
 const formatResponse = require("../middleware/Response");
-const { nanoid } = require("nanoid");
 
 module.exports = {
   create: async (req, res, next) => {
     try {
       const { username, email, password } = req.body;
-      await service.create({
-        id: nanoid(),
+      const newUser = await service.create({
         username,
         email,
-        password
+        password,
+        createdAt: new Date(),
       });
       formatResponse({
         res,
@@ -41,6 +40,22 @@ module.exports = {
     try {
       const {email} = req.params;
       const userFound = await service.getOne(email);
+      formatResponse({
+        res,
+        statusCode: 200,
+        data: userFound,
+        message: "User retrieved successfully"
+      });
+    } catch (err) {
+      next(err)
+    }
+
+  },
+
+  getHistory: async (req, res, next) => {
+    try {
+      const {email} = req.params;
+      const userFound = await service.getHistory(email);
       formatResponse({
         res,
         statusCode: 200,

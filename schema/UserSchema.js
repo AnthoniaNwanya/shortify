@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
+const ObjectId = mongoose.Schema.ObjectId;
 
 const UserSignupSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-},
+  id: ObjectId,
   username: {
     type: String,
     required: [true, "can't be blank"],
@@ -25,6 +23,12 @@ const UserSignupSchema = new mongoose.Schema({
       ref: "URL",
     },
   ],
+  createdAt: {
+    type: String,
+  },
+  updatedAt: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("User", UserSignupSchema);
