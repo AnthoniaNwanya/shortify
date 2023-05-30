@@ -3,17 +3,16 @@ const urlService = require("../service/urlService");
 const UrlSchema = require("../schema/UrlSchema");
 const { nanoid } = require("nanoid");
 const formatResponse = require("../middleware/Response");
-const BaseUrl = process.env.BASE;
 const IP = require('ip');
-
+const QRCode = require("qrcode");
 
 module.exports = {
     post: async (req, res, next) => {
         try {
+            const BaseUrl = process.env.BASE;
             const origUrl = req.body.origUrl;
-            const email = req.params.email;
-            const urlId = req.body.customId || nanoid(7);          
-            const user = await userService.getOne(email);
+            const urlId = req.body.customId || nanoid(5);
+            const user = await userService.getOne(req.User.email);
             const findUrl = await UrlSchema.findOne({ "origUrl": origUrl });
             if (findUrl) {
                 formatResponse({
@@ -31,37 +30,39 @@ module.exports = {
                     createdAt: new Date(),
                 });
                 const savedUrl = await newUrl.save();
-                // Link user to URLs
                 user.URLS = user.URLS.concat(savedUrl.shortUrl);
                 await user.save();
 
-                // make a different route for this history of urls for user
-                // const urlHistory = await UrlSchema.find({ "User": email });
-                // // Or get only shorturl
-                // for (let index = 0; index < urlHistory.length; index++) {
-                //     const element = urlHistory[index];
-                //     const result = element.shortUrl
-                //     return result
-                // }
+                // QRCODE
+                QRCode.toFile('qrcode-img.png', newUrl.shortUrl, {
+                    color: {
+                      dark: '#00F', 
+                      light: '#0000'
+                    }
+                  }, function (err) {
+                    if (err) throw err
+                  })
 
                 formatResponse({
                     res,
+                    data: savedUrl.shortUrl,
                     statusCode: 201,
                     message: "URL created"
                 });
-            }
+            };
         } catch (err) {
             next(err)
-        }
+        };
     },
 
-    getAll: async (req, res, next) => {
+    urlHistory: async (req, res, next) => {
         try {
-            const URL = await urlService.getAll();
+            const user = await userService.getOne(req.User.email);
+             await urlService.urlHistory(user);
             formatResponse({
                 res,
                 statusCode: 200,
-                data: URL,
+                data: user.URLS,
                 message: "URL retrieved successfully"
             })
         } catch (err) {
