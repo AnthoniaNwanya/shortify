@@ -1,24 +1,28 @@
-const { NotFoundError, BadRequestError } = require("../middleware/Error");
+const { NotFoundError, ValidationError, ForbiddenError } = require("../middleware/Error");
 const UrlSchema = require("../schema/UrlSchema");
-const validateUrl = require("../middleware/validateUrl.");
+const {isValidHttpUrl} = require("../middleware/validateUrl");
 
 const post = async (urldata) => {
     const initialUrl = urldata.origUrl;
-    const validUrl = validateUrl(initialUrl)
-    if (validUrl === true) {
+    if (isValidHttpUrl(initialUrl) === true) {
         const createUrl = await UrlSchema.create(urldata);
         return createUrl
     } else {
-        throw new BadRequestError("Invalid URL. Enter a valid URL")
+        throw new ForbiddenError("Invalid URL. Enter a valid URL.")
     }
 };
 
-const getAll = async () => {
-    const getUrls = await UrlSchema.find({})
-    if (!getUrls) {
-        throw new BadRequestError("Unable to get URLs")
+const urlHistory = async (user) => {
+    const email = user.email;
+    const findUrl = await UrlSchema.findOne({"User": email})
+    
+    // const getHistory = await UrlSchema.findOne({"User": user});
+    // console.log(email)
+    if (!findUrl) {
+        throw new NotFoundError("You have no URL yet")
     }
-    return getUrls;
+    const Url = findUrl.shortUrl;
+    return Url;
 };
 
 const getLink = async (urlId, ipAddress) => {
@@ -32,12 +36,12 @@ const getLink = async (urlId, ipAddress) => {
        await getUrl.save();
         return getUrl;
     } else {
-        throw new NotFoundError("Unable to get URL")
+        throw new ForbiddenError("Unable to access link")
     }
    
 };
 module.exports = {
     post,
-    getAll,
+    urlHistory,
     getLink
 }
