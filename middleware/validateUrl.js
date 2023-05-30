@@ -6,4 +6,4 @@ function isValidHttpUrl(string) {
       return false;
     }
 }
-module.exports = isValidHttpUrl  
+module.exports = {isValidHttpUrl}  
