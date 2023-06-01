@@ -1,39 +1,89 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/styles.css">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="/styles.css">
 </head>
+
 <body>
 	<section class="login">
 		<div class="login_box">
 			<div class="left">
-				<div class="top_link"><a href="#"><img src="https://drive.google.com/u/0/uc?id=16U__U5dJdaTfNGobB_OpwAJ73vM50rPV&export=download" alt="">Return home</a></div>
 				<div class="contact">
-					<form action="">
+					<form action="/api/login" method="POST">
 						<h3>Log in</h3>
-                        <input type="text" placeholder="Email">
-						<button class="submit">Let's Go</button>
-                        <p> 
-                            <div>
-                                Not a member? <a href="signup.ejs">Sign up</a>
-                            </div>
-                        </p>
+						<div class="field email-field">
+							<div class="input-field">
+								<input type="text" required class="email" name="email" id="emailID" placeholder="Email">
+							</div>
+							<span class="error email-error">
+								<i class="bx bx-error-circle error-icon"></i>
+								<p class="error-text">Please enter a valid email</p>
+							</span>
+						</div>
+						<button class="submit" onclick="getToken()">Let's Go</button>
+						<!-- <div id="token"></div>
+						<button onclick="getSecret()">get secret message</button>
+						<div id="result"></div> -->
+						<p>
+						<div>
+							Not a member? <a href="/api/signup">Sign up</a>
+						</div>
+						</p>
 					</form>
 				</div>
 			</div>
 			<div class="right">
 				<div class="right-text">
-					<h2>SHORTIFY</h2>
+					<h2>shortify</h2>
 					<h5>A URL SHORTENER</h5>
 				</div>
-				<div class="right-inductor"><img src="https://lh3.googleusercontent.com/fife/ABSRlIoGiXn2r0SBm7bjFHea6iCUOyY0N2SrvhNUT-orJfyGNRSMO2vfqar3R-xs5Z4xbeqYwrEMq2FXKGXm-l_H6QAlwCBk9uceKBfG-FjacfftM0WM_aoUC_oxRSXXYspQE3tCMHGvMBlb2K1NAdU6qWv3VAQAPdCo8VwTgdnyWv08CmeZ8hX_6Ty8FzetXYKnfXb0CTEFQOVF4p3R58LksVUd73FU6564OsrJt918LPEwqIPAPQ4dMgiH73sgLXnDndUDCdLSDHMSirr4uUaqbiWQq-X1SNdkh-3jzjhW4keeNt1TgQHSrzW3maYO3ryueQzYoMEhts8MP8HH5gs2NkCar9cr_guunglU7Zqaede4cLFhsCZWBLVHY4cKHgk8SzfH_0Rn3St2AQen9MaiT38L5QXsaq6zFMuGiT8M2Md50eS0JdRTdlWLJApbgAUqI3zltUXce-MaCrDtp_UiI6x3IR4fEZiCo0XDyoAesFjXZg9cIuSsLTiKkSAGzzledJU3crgSHjAIycQN2PH2_dBIa3ibAJLphqq6zLh0qiQn_dHh83ru2y7MgxRU85ithgjdIk3PgplREbW9_PLv5j9juYc1WXFNW9ML80UlTaC9D2rP3i80zESJJY56faKsA5GVCIFiUtc3EewSM_C0bkJSMiobIWiXFz7pMcadgZlweUdjBcjvaepHBe8wou0ZtDM9TKom0hs_nx_AKy0dnXGNWI1qftTjAg=w1920-h979-ft" alt=""></div>
+				<div class="right-inductor"><img
+						src="https://lh3.googleusercontent.com/fife/ABSRlIoGiXn2r0SBm7bjFHea6iCUOyY0N2SrvhNUT-orJfyGNRSMO2vfqar3R-xs5Z4xbeqYwrEMq2FXKGXm-l_H6QAlwCBk9uceKBfG-FjacfftM0WM_aoUC_oxRSXXYspQE3tCMHGvMBlb2K1NAdU6qWv3VAQAPdCo8VwTgdnyWv08CmeZ8hX_6Ty8FzetXYKnfXb0CTEFQOVF4p3R58LksVUd73FU6564OsrJt918LPEwqIPAPQ4dMgiH73sgLXnDndUDCdLSDHMSirr4uUaqbiWQq-X1SNdkh-3jzjhW4keeNt1TgQHSrzW3maYO3ryueQzYoMEhts8MP8HH5gs2NkCar9cr_guunglU7Zqaede4cLFhsCZWBLVHY4cKHgk8SzfH_0Rn3St2AQen9MaiT38L5QXsaq6zFMuGiT8M2Md50eS0JdRTdlWLJApbgAUqI3zltUXce-MaCrDtp_UiI6x3IR4fEZiCo0XDyoAesFjXZg9cIuSsLTiKkSAGzzledJU3crgSHjAIycQN2PH2_dBIa3ibAJLphqq6zLh0qiQn_dHh83ru2y7MgxRU85ithgjdIk3PgplREbW9_PLv5j9juYc1WXFNW9ML80UlTaC9D2rP3i80zESJJY56faKsA5GVCIFiUtc3EewSM_C0bkJSMiobIWiXFz7pMcadgZlweUdjBcjvaepHBe8wou0ZtDM9TKom0hs_nx_AKy0dnXGNWI1qftTjAg=w1920-h979-ft"
+						alt=""></div>
 			</div>
 		</div>
 	</section>
+	<script >
+// const form = document.querySelector("form"),
+// 			emailField = form.querySelector(".email-field"),
+// 			emailInput = emailField.querySelector(".email"),
+// 			passField = form.querySelector(".create-password"),
+// 			passInput = passField.querySelector(".password")
 
+// 		// Email Validtion
+// 		function checkEmail() {
+// 			const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+// 			if (!emailInput.value.match(emailPattern)) {
+// 				return emailField.classList.add("invalid"); 
+// 			}
+// 			emailField.classList.remove("invalid"); 
+// 		}
+
+
+
+// 		// Calling Funtion on Form Sumbit
+// 		form.addEventListener("submit", (e) => {
+// 			e.preventDefault();
+// 			checkEmail();
+			
+
+// 			//calling function on key up
+// 			emailInput.addEventListener("keyup", checkEmail);
+		
+
+// 			if (
+// 				!emailField.classList.contains("invalid") 
+// 			) 
+// 			{
+// 				location.href = "http://localhost:8000/api/shortify";
+// 			}
+// 		});
+	</script>
 </body>
-</html> -->
+
+</html>
