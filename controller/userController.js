@@ -6,9 +6,6 @@ const jwt = require("jsonwebtoken");
 
 
 module.exports = {
-  // signupView: (req, res) => {
-  //   res.render("signup", {});
-  // },
 
   signup: async (req, res, next) => {
 
@@ -42,14 +39,18 @@ module.exports = {
             throw new ForbiddenError("User does not exist");
         };
         const  signWith = { id: existingUser._id, email: existingUser.email };
-        const token = jwt.sign(signWith, process.env.TOKEN_KEY, { expiresIn: "1h" });
-
-      formatResponse({
-        res,
-        data: token,
-        message: "Token generated",
-        statusCode: 200
-      });
+        const token = jwt.sign(signWith, process.env.TOKEN_KEY, { expiresIn: "1m" });
+       
+        res.cookie("token", token, {
+          httpOnly: true,
+        })
+        return res.redirect("/api/shortify")
+      // formatResponse({
+      //   res,
+        // data: token,
+        // message: "Login duccess",
+      //   statusCode: 200
+      // });
     } catch (err) {
       next(err)
     }
