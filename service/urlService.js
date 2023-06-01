@@ -15,9 +15,6 @@ const post = async (urldata) => {
 const urlHistory = async (user) => {
     const email = user.email;
     const findUrl = await UrlSchema.findOne({"User": email})
-    
-    // const getHistory = await UrlSchema.findOne({"User": user});
-    // console.log(email)
     if (!findUrl) {
         throw new NotFoundError("You have no URL yet")
     }
