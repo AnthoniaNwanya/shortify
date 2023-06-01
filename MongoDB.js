@@ -10,7 +10,7 @@ function MongoDB() {
 
   mongoose.connection.on("error", (err) => {
     console.log("An error occurred while connecting to MongoDB");
-    process.exit(1);
+ 
   });
 }
 
