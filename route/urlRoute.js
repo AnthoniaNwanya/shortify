@@ -4,6 +4,7 @@ const router = express.Router();
 const {authenticateUser} = require("../middleware/authentication");
 
 router.post("/",  authenticateUser, controller.post);
-router.get("/history",  controller.urlHistory);
+router.get("/history", authenticateUser, controller.urlHistory);
+router.get("/analytics", authenticateUser, controller.urlAnalytics);
 
 module.exports = router;

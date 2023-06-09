@@ -30,8 +30,8 @@ const getOne = async (email) => {
     return foundUser
 };
 
-const updateOne = async (id, userUpdate) => {
-    const update = await UserSchema.findByIdAndUpdate(id, userUpdate, {
+const updateOne = async (id, data) => {
+    const update = await UserSchema.findByIdAndUpdate(id, data, {
         new: true,
     });
 
