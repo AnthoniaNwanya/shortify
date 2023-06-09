@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Result Page</title>
-    <link rel="stylesheet" href="/home.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
 
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="/navlinks.css">
+
+    <!-- FontAwesome 5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+        <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
+</head>
 <body>
     <nav>
         <div class="logo">
@@ -19,7 +21,7 @@
         </div>
         <div class="sidebar">
             <div class="logo">
-                <span class="logo-name"> Hi, <%= user.username %> </span>
+                <span class="logo-name"></span>
             </div>
             <div class="sidebar-content">
                 <ul class="lists">
@@ -40,14 +42,14 @@
                             <i class="bx bx-folder-open icon"></i>
                             <span class="link">URL History</span>
                         </a>
-                     </li> 
+                    </li>
                     <!-- <li class="list">
                         <a href="#" class="nav-link">
                             <i class="bx bx-bell icon"></i>
                             <span class="link">Notifications</span>
                         </a>
-                    </li> -->
-                    <!-- <li class="list">
+                    </li>
+                    <li class="list">
                         <a href="#" class="nav-link">
                             <i class="bx bx-message-rounded icon"></i>
                             <span class="link">Messages</span>
@@ -71,9 +73,9 @@
                             <span class="link">Likes</span>
                         </a>
                     </li> -->
+                    
                 </ul>
-
-                <div class="bottom-cotent">
+                    <div class="bottom-cotent">
                     <li class="list">
                         <a href="/logout" class="nav-link">
                             <i class="bx bx-log-out icon"></i>
@@ -91,38 +93,37 @@
         </div>
     </nav>
     <section class="overlay"></section>
-    <section class="features" id="features">
-        <div class="container">
-            <!-- Short URL Feature -->
-            <div class="url-shorten-feature">
-                <form action="/api/shortify" method="post" class="url-shorten-form" id="url-shorten-form">
-                    <div>
-                        <input type="text" class="url-input" placeholder="Shorten a link here..." name="origUrl"
-                        autocomplete="off" />
-                    </div>
-                    <input type="text" class="url-input-span" placeholder="Customize short link?" name="customId">
-                    <button type="submit" class="btn btn-lg btn-plus-icon">shorten it!</button>
-                </form>
-                <div class="url-shorten-results">
-                    <div class="url-shorten-result" id='${id}'>
-                        <div class="old-url">
-                            <p>your generated link is:</p>
-                        </div>
-                        <div class="new-url">
-                            <div class="container">
-                      
-                            </div>
-                            <div class="options">
-                                <button type="button" class="copy-new-url btn btn-sm scale-effect">
-                                    Copy
-                                </button>
-                                <button type="button" class="delete-url scale-effect">
-                                    Clear
-                                </button>
-                            </div>
-                        </div>
-    </section>
-    <script src="/home.js"></script>
-</body>
+    <!-- End -->
 
+    <!-- Main -->
+    <div class="main">
+        <div class="card">
+            <div class="card-body">
+                <i class="fa fa-user-circle" aria-hidden="true"> Dashboard </i>
+                <table class="dashtable">
+                    <tbody>
+                        <tr>
+                            <td>User ID</td>
+                            <td><%= user.id%></td>
+                        </tr>
+                        <tr>
+                            <td>Username</td>
+                            <td><%= user.username%></td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td><%= user.email%></td>
+                        </tr>
+                        <tr>
+                            <td>Password</td>
+                            <td>*****</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- End -->
+    <script src="/navlinks.js"></script>
+</body>
 </html>
