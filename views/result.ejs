@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Result Page</title>
+    <title>Home Page</title>
     <link rel="stylesheet" href="/home.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
@@ -19,7 +19,7 @@
         </div>
         <div class="sidebar">
             <div class="logo">
-                <span class="logo-name"> Hi, <%= user.username %> </span>
+                <span class="logo-name"></span>
             </div>
             <div class="sidebar-content">
                 <ul class="lists">
@@ -40,19 +40,8 @@
                             <i class="bx bx-folder-open icon"></i>
                             <span class="link">URL History</span>
                         </a>
-                     </li> 
-                    <!-- <li class="list">
-                        <a href="#" class="nav-link">
-                            <i class="bx bx-bell icon"></i>
-                            <span class="link">Notifications</span>
-                        </a>
-                    </li> -->
-                    <!-- <li class="list">
-                        <a href="#" class="nav-link">
-                            <i class="bx bx-message-rounded icon"></i>
-                            <span class="link">Messages</span>
-                        </a>
-                    </li> -->
+                    </li>
+
                     <li class="list">
                         <a href="/api/shortify/analytics" class="nav-link">
                             <i class="bx bx-pie-chart-alt-2 icon"></i>
@@ -65,14 +54,7 @@
                             <span class="link">Settings</span>
                         </a>
                     </li>
-                    <!-- <li class="list">
-                        <a href="#" class="nav-link">
-                            <i class="bx bx-heart icon"></i>
-                            <span class="link">Likes</span>
-                        </a>
-                    </li> -->
                 </ul>
-
                 <div class="bottom-cotent">
                     <li class="list">
                         <a href="/logout" class="nav-link">
@@ -93,16 +75,15 @@
     <section class="overlay"></section>
     <section class="features" id="features">
         <div class="container">
-            <!-- Short URL Feature -->
             <div class="url-shorten-feature">
-                <form action="/api/shortify" method="post" class="url-shorten-form" id="url-shorten-form">
+                <!-- <form action="/api/shortify" method="post" class="url-shorten-form" id="url-shorten-form">
                     <div>
                         <input type="text" class="url-input" placeholder="Shorten a link here..." name="origUrl"
-                        autocomplete="off" />
+                            autocomplete="off" />
+                        <span class="alert"></span>
                     </div>
-                    <input type="text" class="url-input-span" placeholder="Customize short link?" name="customId">
                     <button type="submit" class="btn btn-lg btn-plus-icon">shorten it!</button>
-                </form>
+                </form> -->
                 <div class="url-shorten-results">
                     <div class="url-shorten-result" id='${id}'>
                         <div class="old-url">
@@ -110,13 +91,13 @@
                         </div>
                         <div class="new-url">
                             <div class="container">
-                      
+                                <span><a id="short-url" href="<%= `/${shortUrl}` %>" target="_blank"><%= shortUrl %></a></span>
                             </div>
                             <div class="options">
-                                <button type="button" class="copy-new-url btn btn-sm scale-effect">
-                                    Copy
+                                <button type="button" onclick="copyUrl()" class="copy-new-url btn btn-sm scale-effect">
+                                    <span id="copy-action">Copy</span>
                                 </button>
-                                <button type="button" class="delete-url scale-effect">
+                                <button type="button" onclick="location.href='http://localhost:8000/api/shortify'" class="delete-url scale-effect">
                                     Clear
                                 </button>
                             </div>

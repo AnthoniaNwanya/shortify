@@ -18,17 +18,18 @@ describe('User Route', () => {
         await conn.disconnect();
     });
     it('create a user', async () => {
-        const response = await request(app).post('/auth/signup')
+        const response = await request(app).post('/api/signup')
             .set('content-type', 'application/json')
             .send({
                 username: 'testname',
                 email: 'test@mail.com',
                 password: 'test123',
             })
-        expect(response.status).toBe(201);
-        expect(response.body).not.toBe(200);
-        expect(response.body).toHaveProperty('message', 'User created successfully');
-        expect(response.body).not.toHaveProperty('password');
+            expect(response.headers.location).toMatch("/api/login")
+        // expect(response.status).toBe(201);
+        // expect(response.body).not.toBe(200);
+        // expect(response.body).toHaveProperty('message', 'User created successfully');
+        // expect(response.body).not.toHaveProperty('password');
     });
 
 
@@ -38,15 +39,16 @@ describe('User Route', () => {
             email: 'test@mail.com',
             password: 'test123',
         }); 
-        const response = await request(app).post('/auth/login')
+        const response = await request(app).post('/api/login')
             .set('content-type', 'application/json')
             .send({
                 email: 'test@mail.com',
             })
-        expect(response.status).toBe(200);
-        expect(response.body).not.toBe(201);
-        expect(response.body).toHaveProperty('message', 'Token generated');
-        expect(response.body).toHaveProperty('data');
+            expect(response.headers.location).toMatch("/api/shortify")
+        // expect(response.status).toBe(200);
+        // expect(response.body).not.toBe(201);
+        // expect(response.body).toHaveProperty('message', 'Token generated');
+        // expect(response.body).toHaveProperty('data');
     });
 
     it('throw error on incorrect login', async () => {
@@ -55,7 +57,7 @@ describe('User Route', () => {
             email: 'test@mail.com',
             password: 'test123',
         }); 
-        const response = await request(app).post('/auth/login')
+        const response = await request(app).post('/api/login')
             .set('content-type', 'application/json')
             .send({
                 email: 'notexist@mail.com',

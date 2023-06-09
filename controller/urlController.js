@@ -1,6 +1,7 @@
 const userService = require("../service/userService");
 const urlService = require("../service/urlService");
 const UrlSchema = require("../schema/UrlSchema");
+const UserSchema = require("../schema/UserSchema");
 const { nanoid } = require("nanoid");
 const formatResponse = require("../middleware/Response");
 const IP = require('ip');
@@ -13,6 +14,7 @@ module.exports = {
             const origUrl = req.body.origUrl;
             const urlId = req.body.customId || nanoid(5);
             const user = await userService.getOne(req.User.email);
+            // console.log(user)
             const findUrl = await UrlSchema.findOne({ "origUrl": origUrl });
             if (findUrl) {
                 formatResponse({
@@ -23,10 +25,10 @@ module.exports = {
                 });
             } else {
                 const newUrl = await urlService.post({
-                    urlId,
-                    origUrl,
+                    urlId: urlId,
+                    origUrl: origUrl,
                     shortUrl: `${BaseUrl}/${urlId}`,
-                    User: user.email,
+                    User: user._id,
                     createdAt: new Date(),
                 });
                 const savedUrl = await newUrl.save();
@@ -36,19 +38,14 @@ module.exports = {
                 // QRCODE
                 QRCode.toFile('qrcode-img.png', newUrl.shortUrl, {
                     color: {
-                      dark: '#00F', 
-                      light: '#0000'
+                        dark: '#00F',
+                        light: '#0000'
                     }
-                  }, function (err) {
+                }, function (err) {
                     if (err) throw err
-                  })
-
-                formatResponse({
-                    res,
-                    data: savedUrl.shortUrl,
-                    statusCode: 201,
-                    message: "URL created"
-                });
+                })
+                const result = savedUrl.urlId
+                res.render("result.ejs", { shortUrl: result });
             };
         } catch (err) {
             next(err)
@@ -57,23 +54,43 @@ module.exports = {
 
     urlHistory: async (req, res, next) => {
         try {
-            const user = await userService.getOne(req.User.email);
-             await urlService.urlHistory(user);
-            formatResponse({
-                res,
-                statusCode: 200,
-                data: user.URLS,
-                message: "URL retrieved successfully"
+
+            const userObj = await UserSchema.findOne({ "_id": req.User.id });
+            const user = userObj._id.toString()
+            const urls = await UrlSchema.find({ "User": user })
+
+            res.render('urlHistory.ejs', {
+                url: urls
             })
+            // formatResponse({
+            //     res,
+            //     statusCode: 200,
+            //     data: user.URLS,
+            //     message: "URL retrieved successfully"
+            // })
+        } catch (err) {
+            next(err)
+        }
+    },
+    urlAnalytics: async (req, res, next) => {
+        try {
+            const userObj = await UserSchema.findOne({ "_id": req.User.id });
+            const user = userObj._id.toString()
+            const urls = await UrlSchema.find({ "User": user })
+
+            res.render('analytics.ejs', {
+                url: urls
+            })
+
         } catch (err) {
             next(err)
         }
     },
 
-    getLink: async (req, res, next) => {
+    redirectLink: async (req, res, next) => {
         try {
             const ipAddress = IP.address();
-            const URL = await urlService.getLink(req.params.urlId, ipAddress);
+            const URL = await urlService.redirectLink(req.params.urlId, ipAddress);
             res.redirect(URL.origUrl);
 
         } catch (err) {

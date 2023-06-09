@@ -12,17 +12,17 @@ const post = async (urldata) => {
     }
 };
 
-const urlHistory = async (user) => {
-    const email = user.email;
-    const findUrl = await UrlSchema.findOne({"User": email})
-    if (!findUrl) {
-        throw new NotFoundError("You have no URL yet")
-    }
-    const Url = findUrl.shortUrl;
-    return Url;
-};
+// const urlHistory = async (user) => {
+//     const email = user.email;
+//     const findUrls = await UrlSchema.find({})
+//     if (!findUrls) {
+//         throw new NotFoundError("You have no URL yet")
+//     }
+//     const Url = findUrls.shortUrl;
+//     return Url;
+// };
 
-const getLink = async (urlId, ipAddress) => {
+const redirectLink = async (urlId, ipAddress) => {
     const getUrl = await UrlSchema.findOne({"urlId": urlId});
     if (getUrl) {
        await UrlSchema.updateOne(
@@ -39,6 +39,6 @@ const getLink = async (urlId, ipAddress) => {
 };
 module.exports = {
     post,
-    urlHistory,
-    getLink
+    // urlHistory,
+    redirectLink
 }

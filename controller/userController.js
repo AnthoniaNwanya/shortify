@@ -9,8 +9,8 @@ module.exports = {
 
   signup: async (req, res, next) => {
 
-      try {
-        const { username, email, password } = req.body;
+    try {
+      const { username, email, password } = req.body;
 
       const newUser = await service.signup({
         username: username,
@@ -20,37 +20,32 @@ module.exports = {
       });
       await newUser.save();
 
-      formatResponse({
-        res,
-        message: "User created successfully",
-        statusCode: 201
-      });
+      // formatResponse({
+      //   res,
+      //   message: "User created successfully",
+      //   statusCode: 201
+      // });
+      return res.redirect("/api/login")
     } catch (err) {
       next(err)
     }
   },
-  
-  login: async  (req, res, next) => {
+
+  login: async (req, res, next) => {
     try {
       const { email } = req.body;
-      
+
       const existingUser = await UserSchema.findOne({ "email": email });
-        if (!existingUser) {
-            throw new ForbiddenError("User does not exist");
-        };
-        const  signWith = { id: existingUser._id, email: existingUser.email };
-        const token = jwt.sign(signWith, process.env.TOKEN_KEY, { expiresIn: "1m" });
-       
-        res.cookie("token", token, {
-          httpOnly: true,
-        })
-        return res.redirect("/api/shortify")
-      // formatResponse({
-      //   res,
-        // data: token,
-        // message: "Login duccess",
-      //   statusCode: 200
-      // });
+      if (!existingUser) {
+        throw new ForbiddenError("User does not exist");
+      };
+      const signWith = { id: existingUser._id, username: existingUser.username, email: existingUser.email, password: existingUser.password};
+      const token = jwt.sign(signWith, process.env.TOKEN_KEY, { expiresIn: "1h" });
+
+      res.cookie("token", token, {
+        httpOnly: true,
+      })
+      return res.redirect("/api/shortify")
     } catch (err) {
       next(err)
     }
@@ -73,7 +68,7 @@ module.exports = {
 
   getOne: async (req, res, next) => {
     try {
-      const { email } = req.params;
+      const { email } = req.params.email;
       const userFound = await service.getOne(email);
       formatResponse({
         res,
@@ -89,29 +84,41 @@ module.exports = {
 
   updateOne: async (req, res, next) => {
     const id = req.params.id;
-    const userUpdate = req.body;
+    const {username, email, password} = req.body;
     try {
-      const updatedUser = await service.updateOne(id, userUpdate);
-      formatResponse({
-        res,
-        data: updatedUser,
-        statusCode: 200,
-        message: "User update was successful",
+      const updatedUser = await service.updateOne(id, {
+        username: username,
+        email: email,
+        password: password,
       });
+      await updatedUser.save()
+      res.redirect("/api/dashboard")
+      // formatResponse({
+      //   res,
+      //   data: updatedUser,
+      //   statusCode: 200,
+      //   message: "User update was successful",
+      // });
     } catch (err) {
       next(err)
     }
   },
 
   deleteOne: async (req, res, next) => {
-    const id = req.params.id;
+    const id = req.params.id
     try {
       const deletedUser = await service.deleteOne(id);
-      formatResponse({
-        res,
-        statusCode: 200,
-        message: "Successfully deleted user",
-      });
+      // res.clearCookie("token")
+      res.redirect("/api/signup")
+      // res.clearCookie("token");
+    //  return 
+    // return 
+    // res.redirect('/api/signup');
+      // formatResponse({
+      //   res,
+      //   statusCode: 200,
+      //   message: "Successfully deleted user",
+      // });
     } catch (err) {
       next(err)
     }

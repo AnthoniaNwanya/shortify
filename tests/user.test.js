@@ -20,7 +20,7 @@ describe('User Route', () => {
     });
 
     it('return all users', async () => {
-        const response = await request(app).get('/api')
+        const response = await request(app).get('/api/user')
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('message', 'Users retrieved successfully');
         expect(response.body).toHaveProperty('data');
@@ -34,7 +34,7 @@ describe('User Route', () => {
             email: 'test@mail.com',
             password: 'test123',
         });
-        const response = await request(app).get('/api/' + user.email)
+        const response = await request(app).get('/api/user' + user.email)
             .set('content-type', 'application/json');
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('message', 'User retrieved successfully'); 
@@ -51,7 +51,7 @@ describe('User Route', () => {
             email: 'test@mail.com',
             password: 'test123',
         });
-        const response = await request(app).put('/api/' + user._id)
+        const response = await request(app).put('/api/user' + user.id)
             .set('content-type', 'application/json')
             .send({
                 username: 'updatename',
@@ -71,9 +71,9 @@ describe('User Route', () => {
             email: 'delete@mail.com',
             password: 'delete123',
         });
-        const response = await request(app).delete('/api/' + user._id)
+        const response = await request(app).delete('/api/user' + user.id)
             .set('content-type', 'application/json')
-        expect(response.status).toStrictEqual(200);
+        expect(response.status).toBe(200);
         expect(response.body.message).toEqual('Successfully deleted user');
     });
 
