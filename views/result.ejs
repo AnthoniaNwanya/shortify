@@ -76,14 +76,6 @@
     <section class="features" id="features">
         <div class="container">
             <div class="url-shorten-feature">
-                <!-- <form action="/api/shortify" method="post" class="url-shorten-form" id="url-shorten-form">
-                    <div>
-                        <input type="text" class="url-input" placeholder="Shorten a link here..." name="origUrl"
-                            autocomplete="off" />
-                        <span class="alert"></span>
-                    </div>
-                    <button type="submit" class="btn btn-lg btn-plus-icon">shorten it!</button>
-                </form> -->
                 <div class="url-shorten-results">
                     <div class="url-shorten-result" id='${id}'>
                         <div class="old-url">
@@ -91,17 +83,32 @@
                         </div>
                         <div class="new-url">
                             <div class="container">
-                                <span><a id="short-url" href="<%= `/${shortUrl}` %>" target="_blank"><%= shortUrl %></a></span>
+                                <span><a id="short-url" href="<%= `/${shortUrl}` %>" target="_blank">
+                                        <%= shortUrl %>
+                                    </a></span>
                             </div>
                             <div class="options">
                                 <button type="button" onclick="copyUrl()" class="copy-new-url btn btn-sm scale-effect">
                                     <span id="copy-action">Copy</span>
                                 </button>
-                                <button type="button" onclick="location.href='http://localhost:8000/api/shortify'" class="delete-url scale-effect">
+                                <button type="button" onclick="location.href='http://localhost:8000/api/shortify'"
+                                    class="delete-url scale-effect">
                                     Clear
                                 </button>
                             </div>
                         </div>
+                    </div>
+                    <div class="urlcode">
+                        <img class="imagetag" src=<%=qrcode%> alt="QR Code Image">
+                    </div>
+                    <div class="downloadbtn">
+                        <a id='qrdl' hidden><button type="button">
+                                <span id="download-action">Download QR CODE</span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
     </section>
     <script src="/home.js"></script>
 </body>
