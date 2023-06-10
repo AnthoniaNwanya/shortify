@@ -257,6 +257,20 @@ nav.open ~ .overlay {
   border-radius: 6px;
   margin-bottom: 15.15152px;
 }
+.urlcode{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.downloadbtn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 3px;
+  border-color: 2px solid white;
+}
 
 .url-shorten-results .url-shorten-result > div p {
   font-size: 17px;

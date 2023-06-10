@@ -12,13 +12,11 @@ const limitRate = require("./middleware/rateLimiter");
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
-
 
 
 const app = express();
 if (process.env.NODE_ENV === "development") {
-  // app.use(limitRate);
+  app.use(limitRate);
 }
 app.use(
   session({
@@ -27,7 +25,7 @@ app.use(
     saveUninitialized: true,
   })
   );
-  app.use(methodOverride());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser())
