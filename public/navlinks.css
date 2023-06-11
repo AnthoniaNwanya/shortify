@@ -245,8 +245,6 @@ nav.open ~ .overlay {
   background-color: aquamarine;
   
 }
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap'); */
-
 
 #body{
     font-family: 'Poppins', sans-serif;
@@ -256,11 +254,9 @@ nav.open ~ .overlay {
 .wrapper{
     border: 1px solid #ddd;
     border-radius: 15px;
-    /* margin: 10px auto; */
     width: 100%;
 }
 h4{
-    /* letter-spacing: -1px; */
     font-weight: 400;
     font-variant: small-caps;
 }

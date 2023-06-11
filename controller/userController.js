@@ -68,7 +68,7 @@ module.exports = {
 
   getOne: async (req, res, next) => {
     try {
-      const { email } = req.params.email;
+      const { email } = req.params;
       const userFound = await service.getOne(email);
       formatResponse({
         res,
@@ -91,7 +91,8 @@ module.exports = {
         email: email,
         password: password,
       });
-      await updatedUser.save()
+      
+      // await updatedUser.save()
       res.redirect("/api/dashboard")
       // formatResponse({
       //   res,
@@ -108,12 +109,8 @@ module.exports = {
     const id = req.params.id
     try {
       const deletedUser = await service.deleteOne(id);
-      // res.clearCookie("token")
       res.redirect("/api/signup")
-      // res.clearCookie("token");
-    //  return 
-    // return 
-    // res.redirect('/api/signup');
+
       // formatResponse({
       //   res,
       //   statusCode: 200,
