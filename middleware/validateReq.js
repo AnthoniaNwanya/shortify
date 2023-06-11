@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const {ValidationError} = require("./Error");
-// 
+
 const validateRequest = (schema) => (req, res, next) => {
   const {value, error} = Joi.compile(schema)
       .validate(req.body, {abortEarly: false});
