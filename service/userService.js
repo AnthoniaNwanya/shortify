@@ -23,7 +23,7 @@ const getOne = async (email) => {
     if (!email) {
         throw new ValidationError("email is required")
     }
-    let foundUser = await UserSchema.findOne({ "email": email }, { password: 0 });
+    let foundUser = await UserSchema.findOne({ "email": email });
     if (!foundUser) {
         throw new NotFoundError("User not found")
     }
@@ -34,14 +34,11 @@ const updateOne = async (id, data) => {
     const update = await UserSchema.findByIdAndUpdate(id, data, {
         new: true,
     });
-
     if (!update || id === undefined) {
         throw new BadRequestError("Verify user or new update");
     }
     update.updatedAt = new Date();
     await update.save();
-
-
     return update;
 };
 

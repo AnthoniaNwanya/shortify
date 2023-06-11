@@ -14,7 +14,6 @@ module.exports = {
             const origUrl = req.body.origUrl;
             const urlId = req.body.customId || nanoid(5);
             const user = await userService.getOne(req.User.email);
-            // console.log(user)
             const findUrl = await UrlSchema.findOne({ "origUrl": origUrl });
             if (findUrl) {
                 formatResponse({
@@ -35,17 +34,14 @@ module.exports = {
                 user.URLS = user.URLS.concat(savedUrl.shortUrl);
                 await user.save();
 
+                const result = savedUrl.urlId;
+                const qrresult = savedUrl.shortUrl;
                 // QRCODE
-                QRCode.toFile('qrcode-img.png', newUrl.shortUrl, {
-                    color: {
-                        dark: '#00F',
-                        light: '#0000'
-                    }
-                }, function (err) {
-                    if (err) throw err
+                QRCode.toDataURL(qrresult, (err, src) => {
+                    if (err) res.send("Error occurred");
+                    res.render("result", { shortUrl: result, qrcode: src });
                 })
-                const result = savedUrl.urlId
-                res.render("result.ejs", { shortUrl: result });
+
             };
         } catch (err) {
             next(err)
