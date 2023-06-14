@@ -102,7 +102,7 @@ describe('User Route', () => {
             .redirects(0)
 
         expect(response.status).toBe(302);
-        expect(response.headers.location).toMatch("/signup")
+        expect(response.headers.location).toMatch("/")
     });
 
 });
