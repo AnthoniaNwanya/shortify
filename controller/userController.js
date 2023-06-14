@@ -19,12 +19,7 @@ module.exports = {
         createdAt: new Date(),
       });
       await newUser.save();
-
-      // formatResponse({
-      //   res,
-      //   message: "User created successfully",
-      //   statusCode: 201
-      // });
+      
       return res.redirect("/api/login")
     } catch (err) {
       next(err)
@@ -46,6 +41,7 @@ module.exports = {
         httpOnly: true,
       })
       return res.redirect("/api/shortify")
+      
     } catch (err) {
       next(err)
     }
@@ -85,21 +81,16 @@ module.exports = {
   updateOne: async (req, res, next) => {
     const id = req.params.id;
     const {username, email, password} = req.body;
+  
     try {
       const updatedUser = await service.updateOne(id, {
         username: username,
         email: email,
         password: password,
       });
-      
-      // await updatedUser.save()
+      // req.flash("Account update has been saved!")
       res.redirect("/api/dashboard")
-      // formatResponse({
-      //   res,
-      //   data: updatedUser,
-      //   statusCode: 200,
-      //   message: "User update was successful",
-      // });
+
     } catch (err) {
       next(err)
     }
@@ -109,13 +100,9 @@ module.exports = {
     const id = req.params.id
     try {
       const deletedUser = await service.deleteOne(id);
+      // req.flash("deleteSuccess", "Your account has been deleted")
       res.redirect("/api/signup")
 
-      // formatResponse({
-      //   res,
-      //   statusCode: 200,
-      //   message: "Successfully deleted user",
-      // });
     } catch (err) {
       next(err)
     }

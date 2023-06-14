@@ -36,7 +36,7 @@ module.exports = {
 
                 const result = savedUrl.urlId;
                 const qrresult = savedUrl.shortUrl;
-                // QRCODE
+           
                 QRCode.toDataURL(qrresult, (err, src) => {
                     if (err) res.send("Error occurred");
                     res.render("result", { shortUrl: result, qrcode: src });
@@ -58,12 +58,6 @@ module.exports = {
             res.render('urlHistory.ejs', {
                 url: urls
             })
-            // formatResponse({
-            //     res,
-            //     statusCode: 200,
-            //     data: user.URLS,
-            //     message: "URL retrieved successfully"
-            // })
         } catch (err) {
             next(err)
         }

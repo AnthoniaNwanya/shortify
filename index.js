@@ -12,6 +12,7 @@ const limitRate = require("./middleware/rateLimiter");
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const flash = require("connect-flash");
 
 const app = express();
 if (process.env.NODE_ENV === "development") {
@@ -29,7 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(express.static('public'));
-
+app.use(flash());
 app.set('views', path.join('views'))
 app.set('view engine', 'ejs');
 
@@ -41,7 +42,8 @@ app.get('/api/login', (req, res) => {
 });
 app.get('/api/shortify', authenticateUser, (req, res) => {
   res.render('home', {
-    user: req.User
+    user: req.User,
+    invalidFlash: req.flash('invalidUrl')
   });
 });
 app.get('/api/dashboard', authenticateUser, (req, res) => {
