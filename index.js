@@ -98,10 +98,10 @@ app.use(function (err, req, res, next) {
   ErrorHandler(err, req, res);
 });
 
-app.use("*", () => {
-  throw new ForbiddenError("Invalid Request: Route Not Found")
+// app.use("*", () => {
+//   throw new ForbiddenError("Invalid Request: Route Not Found")
 
-});
+// });
 
 
 
