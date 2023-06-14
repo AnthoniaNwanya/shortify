@@ -101,7 +101,7 @@ module.exports = {
     try {
       const deletedUser = await service.deleteOne(id);
       // req.flash("deleteSuccess", "Your account has been deleted")
-      res.redirect("/signup")
+      res.redirect("/")
 
     } catch (err) {
       next(err)

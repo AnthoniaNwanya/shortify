@@ -8,7 +8,7 @@ const authenticateUser = (req, res, next) => {
         next();
     } catch (err) {
         res.clearCookie("token");
-        return res.redirect("/api/login")
+        return res.redirect("/login")
     }
 
 };

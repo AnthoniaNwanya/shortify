@@ -18,7 +18,7 @@ describe('User Route', () => {
         await conn.disconnect();
     });
     it('create a user', async () => {
-        const response = await request(app).post('/signup')
+        const response = await request(app).post('/')
             .set('content-type', 'application/json')
             .send({
                 username: 'testname',
@@ -29,14 +29,14 @@ describe('User Route', () => {
     });
 
         it('should throw error if user already exists ', async () => {
-         await request(app).post('/signup')
+         await request(app).post('/')
             .set('content-type', 'application/json')
             .send({
                 username: 'testname',
                 email: 'test@mail.com',
                 password: 'test123',
             })
-        const response = await request(app).post('/signup')
+        const response = await request(app).post('/')
             .set('content-type', 'application/json')
             .send({
                 username: 'testname',
