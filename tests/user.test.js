@@ -1,18 +1,15 @@
 const request = require('supertest');
 const { connect } = require('./database');
 const UserSchema = require('../schema/UserSchema');
-const UrlSchema = require('../schema/UrlSchema');
 const app = require('../index');
-const userController = require('../controller/userController');
 
 describe('User Route', () => {
     let conn;
-    let user
+    let user;
     beforeAll(async () => {
         conn = await connect();
         const createuser = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
-
-user = createuser
+        user = createuser
     })
 
     afterEach(async () => {
@@ -23,65 +20,89 @@ user = createuser
         await conn.disconnect();
     });
 
-    it('return all users', async () => {
-        const response = await request(app).get('/api/user')
+    it('should return all users', async () => {
+        const response = await request(app).get('/api/user');
+
         expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('message', 'Users retrieved successfully');
         expect(response.body).toHaveProperty('data');
         expect(response.body.data).toEqual(expect.any(Array));
         expect(response.body.data).toHaveLength(1);
+        expect(response.body).toHaveProperty('message', 'Users retrieved successfully');
     });
 
-    it('return a user by email', async () => {
-     
-         const createUser = await UserSchema.create({ username: 'testname', email: 'test@mail.com', password: '1234567' });
+    it('should return empty array if no users are found', async () => {
+        const response = await request(app).get('/api/user');
 
+        expect(response.body).toHaveProperty('data');
+        expect(response.body.data).toEqual([]);
+        expect(response.body.data).toHaveLength(0);
+        expect(response.body).toHaveProperty('message', 'Users retrieved successfully');
+    });
+
+    it('should return a user by email', async () => {
+        const createUser = await UserSchema.create({ username: 'testname', email: 'test@mail.com', password: '1234567' });
         const response = await request(app).get('/api/user/' + createUser.email)
-          
+
         expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('message', 'User retrieved successfully'); 
         expect(response.body.data).toHaveProperty('_id');
         expect(response.body.data).toHaveProperty('URLS', []);
         expect(response.body.data).toHaveProperty('email', 'test@mail.com');
         expect(response.body.data).toHaveProperty('username', 'testname');
-        // expect(response.body.data).not.toHaveProperty('password');
+        expect(response.body.data).not.toHaveProperty('password');
+        expect(response.body).toHaveProperty('message', 'User retrieved successfully');
     });
 
-    it('return user account update by id', async () => {
+    it('should throw an error if no user was found', async () => {
+        const response = await request(app).get('/api/user/' + user.email)
+
+        expect(response.status).toBe(500);
+        expect(response.body).toHaveProperty('message', 'User not found');
+    });
+
+    it('should redirect a user to dashboard after successful update', async () => {
         const createUser = await UserSchema.create({
             username: 'testname',
             email: 'test@mail.com',
             password: 'test123',
         });
-
-        const response = await request(app).post('/api/user/update/' + createUser.id)
-            // .set('content-type', 'application/json')
-            .set('Cookie', 'TOKEN_KEY=saehior384u09ujrjejskbdv3u6y749283o')
+        const userId = createUser._id.toString()
+        const login = await request(app).post('/api/login')
+            .send({
+                email: 'test@mail.com',
+            })
+        const loginResponse = login.headers['set-cookie'];
+        const response = await request(app).post('/api/user/update/' + userId)
             .send({
                 username: 'updatename',
                 email: 'update@mail.com',
                 password: 'update123',
             })
-            // console.log(response)
-        // expect(response.status).toBe(200);
-        expect(response.headers.location).toMatch("/api/dashboard")
-        // expect(response.body).toHaveProperty('message', 'User update was successful');
-        // expect(response.body.data).toHaveProperty('username', 'updatename'); 
-        // expect(response.body.data).toHaveProperty('email', 'update@mail.com');
-        // expect(response.body.data).toHaveProperty('password','update123' );
+            .set("Cookie", loginResponse)
+            .redirects(0)
+
+        expect(response.status).toBe(302);
+        expect(response.headers.location).toMatch("/api/dashboard");
+
     });
 
-    it('delete user account by id', async () => {
+    it('should successfully delete a user account by id and redirect to the signup page', async () => {
         const createUser = await UserSchema.create({
             username: 'deletetname',
             email: 'delete@mail.com',
             password: 'delete123',
         });
-        const response = await request(app).post('/api/user/delete/' + createUser._id)
-            .set('content-type', 'application/json')
-        // expect(response.status).toBe(200);
-        expect(response.headers.location).toMatch("/api/login")
-        // expect(response.body.message).toEqual('Successfully deleted user');
+        const userId = createUser._id.toString()
+        const login = await request(app).post('/api/login')
+            .send({
+                email: 'delete@mail.com',
+            })
+        const loginResponse = login.headers['set-cookie'];
+        const response = await request(app).post('/api/user/delete/' + userId)
+            .set("Cookie", loginResponse)
+            .redirects(0)
+
+        expect(response.status).toBe(302);
+        expect(response.headers.location).toMatch("/api/signup")
     });
 
 });

@@ -23,7 +23,7 @@ const getOne = async (email) => {
     if (!email) {
         throw new ValidationError("email is required")
     }
-    let foundUser = await UserSchema.findOne({ "email": email });
+    let foundUser = await UserSchema.findOne({ "email": email }, {password: 0});
     if (!foundUser) {
         throw new NotFoundError("User not found")
     }

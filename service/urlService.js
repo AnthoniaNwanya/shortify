@@ -4,23 +4,13 @@ const {isValidHttpUrl} = require("../middleware/validateUrl");
 
 const post = async (urldata) => {
     const initialUrl = urldata.origUrl;
-    if (isValidHttpUrl(initialUrl) === true) {
+    if (isValidHttpUrl(initialUrl) !== true) {
+        throw new ForbiddenError("Invalid URL. Enter a valid URL.")
+    } else {
         const createUrl = await UrlSchema.create(urldata);
         return createUrl
-    } else {
-        throw new ForbiddenError("Invalid URL. Enter a valid URL.")
     }
 };
-
-// const urlHistory = async (user) => {
-//     const email = user.email;
-//     const findUrls = await UrlSchema.find({})
-//     if (!findUrls) {
-//         throw new NotFoundError("You have no URL yet")
-//     }
-//     const Url = findUrls.shortUrl;
-//     return Url;
-// };
 
 const redirectLink = async (urlId, ipAddress) => {
     const getUrl = await UrlSchema.findOne({"urlId": urlId});
@@ -39,6 +29,5 @@ const redirectLink = async (urlId, ipAddress) => {
 };
 module.exports = {
     post,
-    // urlHistory,
     redirectLink
 }
