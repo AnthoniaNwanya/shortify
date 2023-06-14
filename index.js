@@ -40,7 +40,7 @@ app.use(
       resave: true,
       saveUninitialized: true,
       store: MongoStore.create({
-        mongoUrl: process.env.url,
+        mongoUrl: process.env.MONGO_URI,
         ttl: 60 * 60 * 24,
       }),
     }));
