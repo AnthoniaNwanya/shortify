@@ -1,6 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path")
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const cors = require("cors");
+const flash = require("connect-flash");
+const MongoStore = require("connect-mongo");
 const AuthRoute = require("./route/authRoute");
 const UserRoute = require("./route/userRoute");
 const UrlRoute = require("./route/urlRoute");
@@ -9,25 +15,36 @@ const ErrorHandler = require("./middleware/ErrorHandler");
 const { authenticateUser } = require("./middleware/authentication");
 const { ForbiddenError } = require("./middleware/Error");
 const limitRate = require("./middleware/rateLimiter");
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const flash = require("connect-flash");
 
 const app = express();
 if (process.env.NODE_ENV === "development") {
   app.use(limitRate);
-}
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-  })
-  );
+};
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+const whitelist = [
+  "https://shortify-url-q374.onrender.com/",
+  "http://localhost:8000",
+];
+app.use(
+  cors({
+    origin: whitelist,
+    headers: ["Content-Type"],
+    credentials: true,
+  })
+  );
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: true,
+      saveUninitialized: true,
+      store: MongoStore.create({
+        mongoUrl: process.env.url,
+        ttl: 60 * 60 * 24,
+      }),
+    }));
+
 app.use(cookieParser())
 app.use(express.static('public'));
 app.use(flash());
