@@ -15,7 +15,9 @@ const ErrorHandler = require("./middleware/ErrorHandler");
 const { authenticateUser } = require("./middleware/authentication");
 const { ForbiddenError } = require("./middleware/Error");
 const limitRate = require("./middleware/rateLimiter");
+const { MongoDB } = require("./MongoDB");
 
+MongoDB();
 const app = express();
 if (process.env.NODE_ENV === "development") {
   app.use(limitRate);
