@@ -25,38 +25,53 @@ describe('User Route', () => {
                 email: 'test@mail.com',
                 password: 'test123',
             })
-            expect(response.headers.location).toMatch("/api/login")
-        // expect(response.status).toBe(201);
-        // expect(response.body).not.toBe(200);
-        // expect(response.body).toHaveProperty('message', 'User created successfully');
-        // expect(response.body).not.toHaveProperty('password');
+        expect(response.headers.location).toMatch("/api/login")
     });
 
+        it('should throw error if user already exists ', async () => {
+         await request(app).post('/api/signup')
+            .set('content-type', 'application/json')
+            .send({
+                username: 'testname',
+                email: 'test@mail.com',
+                password: 'test123',
+            })
+        const response = await request(app).post('/api/signup')
+            .set('content-type', 'application/json')
+            .send({
+                username: 'testname',
+                email: 'test@mail.com',
+                password: 'test123',
+            })
 
-    it('login a user and give token', async () => {
+        expect(response.body).not.toBe(302);
+        expect(response.body).toHaveProperty('message', 'User already exists');
+    });
+
+    it('should login a user and redirect to home page, with set token in headers', async () => {
         const user = await UserSchema.create({
             username: 'testname',
             email: 'test@mail.com',
             password: 'test123',
-        }); 
+        });
         const response = await request(app).post('/api/login')
             .set('content-type', 'application/json')
             .send({
                 email: 'test@mail.com',
             })
-            expect(response.headers.location).toMatch("/api/shortify")
-        // expect(response.status).toBe(200);
-        // expect(response.body).not.toBe(201);
-        // expect(response.body).toHaveProperty('message', 'Token generated');
-        // expect(response.body).toHaveProperty('data');
+        const cookies = response.headers['set-cookie']
+
+        expect(response.headers.location).toMatch("/api/shortify")
+        expect(response.headers).toHaveProperty('set-cookie');
+
     });
 
-    it('throw error on incorrect login', async () => {
+    it('should throw error on incorrect login', async () => {
         const user = await UserSchema.create({
             username: 'testname',
             email: 'test@mail.com',
             password: 'test123',
-        }); 
+        });
         const response = await request(app).post('/api/login')
             .set('content-type', 'application/json')
             .send({

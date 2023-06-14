@@ -9,19 +9,18 @@ const { nanoid } = require("nanoid");
 
 describe('Url Route', () => {
     let conn;
-    let loginToken;
+    let loginResponse;
 
     beforeAll(async () => {
         conn = await connect()
 
         await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
 
-        const login = await request(app)
-            .post('/auth/login')
-            .set('content-type', 'application/json')
-            .send({ email: 'tonia@mail.com' })
-
-        loginToken = login.body.data;
+        const login = await request(app).post('/api/login')
+            .send({
+                email: 'tonia@mail.com',
+            })
+        loginResponse = login.headers['set-cookie'];
     });
 
     afterEach(async () => {
@@ -33,56 +32,102 @@ describe('Url Route', () => {
     })
 
     it('generate random shortened url', async () => {
+
         const response = await request(app)
             .post('/api/shortify')
             .set('content-type', 'application/json')
-            .set('Authorization', `Bearer ${loginToken}`)
             .send({
                 origUrl: "https://github.com/AnthoniaNwanya"
-            });
-            expect(response.headers.location).toMatch("/api/shortify")
-        // expect(response.status).toBe(201);
-        // expect(response.body).toHaveProperty('message', 'URL created');
-        // expect(response.body).toHaveProperty('data');
-        // expect(response.body.data).toEqual(expect.any(String));
+            })
+            .set("Cookie", loginResponse)
+            .redirects(0)
+
+        expect(response.status).toBe(200);
+        expect(response.text).toContain('result');
+        expect(response.text).toContain("<p>your generated link is:</p>");
+        expect(response.text).toContain(" <span id=\"download-action\">Download QR CODE</span>");
+
     });
 
     it('generate custom shortened url', async () => {
+
         await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
-
-        const login = await request(app)
-            .post('/auth/login')
-            .set('content-type', 'application/json')
-            .send({ email: 'tonia@mail.com' })
-
-        loginToken = login.body.data;
-
-        const customId = "tonia";
+        const login = await request(app).post('/api/login')
+            .send({
+                email: 'tonia@mail.com',
+            })
+        loginResponse = login.headers['set-cookie'];
         const response = await request(app)
             .post('/api/shortify')
             .set('content-type', 'application/json')
-            .set('Authorization', `Bearer ${loginToken}`)
+            .set('Cookie', loginResponse)
             .send({
                 origUrl: "https://github.com/AnthoniaNwanya",
                 customId: "tonia"
             });
-            expect(response.headers.location).toMatch("/api/shortify")
-        // expect(response.status).toBe(201);
-        // expect(response.body).toHaveProperty('message', 'URL created');
-        // expect(response.body).toHaveProperty('data');
-        // expect(response.body.data).toBe(`${process.env.BASE}/${customId}`);
+
+        expect(response.status).toBe(200);
+        expect(response.text).toContain('result');
+        expect(response.text).toContain("<p>your generated link is:</p>");
+        expect(response.text).toContain(" <span id=\"download-action\">Download QR CODE</span>");
     });
 
-    it('return array of urls created', async () => {
-        const user = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
+    it('should return "URL already exists" when already existing url is passed', async () => {
 
-        const login = await request(app)
-            .post('/auth/login')
+        await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
+        const login = await request(app).post('/api/login')
+            .send({
+                email: 'tonia@mail.com',
+            })
+        loginResponse = login.headers['set-cookie'];
+        await request(app)
+            .post('/api/shortify')
             .set('content-type', 'application/json')
-            .send({ email: 'tonia@mail.com' })
+            .set('Cookie', loginResponse)
+            .send({
+                origUrl: "https://github.com/AnthoniaNwanya",
+                customId: "tonia"
+            });
+        const response = await request(app)
+            .post('/api/shortify')
+            .set('content-type', 'application/json')
+            .set('Cookie', loginResponse)
+            .send({
+                origUrl: "https://github.com/AnthoniaNwanya",
+                
+            });
 
-        loginToken = login.body.data;
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('message', 'URL already exists');
+        expect(response.body.data).toBe('http://localhost:8000/tonia');
 
+    });
+
+    it('should throw error when URL is invalid', async () => {
+
+        await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
+        const login = await request(app).post('/api/login')
+            .send({
+                email: 'tonia@mail.com',
+            })
+        loginResponse = login.headers['set-cookie'];
+        const response = await request(app)
+            .post('/api/shortify')
+            .set('content-type', 'application/json')
+            .set('Cookie', loginResponse)
+            .send({
+                origUrl: "www.anyrtwee.com",
+                customId: "tonia"
+            });
+
+        expect(response.statusCode).toBe(403);
+        expect(response.body).toHaveProperty('message','Invalid URL. Enter a valid URL.');
+        expect(response.body.data).not.toBe('http://localhost:8000/tonia');
+
+    });
+
+    it('return url history of user', async () => {
+        const user = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
         const BASE = process.env.BASE;
         const urlId = nanoid(5);
         await UrlSchema.create({
@@ -92,14 +137,30 @@ describe('Url Route', () => {
             User: user.email,
             createdAt: new Date(),
         });
+        await UrlSchema.create({
+            urlId: urlId,
+            origUrl: "https://cloud.mongodb.com",
+            shortUrl: (`${BASE}/${urlId}`),
+            User: user.email,
+            createdAt: new Date(),
+        });
+        const login = await request(app).post('/api/login')
+            .send({
+                email: 'tonia@mail.com',
+            })
+        loginResponse = login.headers['set-cookie'];
 
         const response = await request(app)
             .get('/api/shortify/history')
-            .set('Authorization', `Bearer ${loginToken}`)
-            expect(response.headers.location).toMatch("/api/shortify/history")
-        // expect(response.status).toBe(200);
-        // expect(response.body).toHaveProperty('data');
-        // expect(response.body.data).toEqual(expect.any(Array));
+            .set('Cookie', loginResponse)
+
+
+        expect(response.status).toBe(200);
+        expect(response.text).toContain("<i class=\"bx bx-folder-open icon\">URL HISTORY </i>");
+        expect(response.text).toContain("<th scope=\"col\">Original URL</th>");
+        expect(response.text).toContain("<th scope=\"col\">Short URL</th>");
+        expect(response.text).toContain("<th scope=\"col\">Created</th>");
+       
 
     });
 
@@ -126,7 +187,7 @@ describe('Url Route', () => {
         const response = await request(app)
             .get('/' + urlId)
 
-            expect(response.headers.location).toMatch("https://github.com/AnthoniaNwanya")
+        expect(response.headers.location).toMatch("https://github.com/AnthoniaNwanya")
     });
 
 
