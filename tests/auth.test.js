@@ -18,25 +18,25 @@ describe('User Route', () => {
         await conn.disconnect();
     });
     it('create a user', async () => {
-        const response = await request(app).post('/api/signup')
+        const response = await request(app).post('/signup')
             .set('content-type', 'application/json')
             .send({
                 username: 'testname',
                 email: 'test@mail.com',
                 password: 'test123',
             })
-        expect(response.headers.location).toMatch("/api/login")
+        expect(response.headers.location).toMatch("/login")
     });
 
         it('should throw error if user already exists ', async () => {
-         await request(app).post('/api/signup')
+         await request(app).post('/signup')
             .set('content-type', 'application/json')
             .send({
                 username: 'testname',
                 email: 'test@mail.com',
                 password: 'test123',
             })
-        const response = await request(app).post('/api/signup')
+        const response = await request(app).post('/signup')
             .set('content-type', 'application/json')
             .send({
                 username: 'testname',
@@ -54,7 +54,7 @@ describe('User Route', () => {
             email: 'test@mail.com',
             password: 'test123',
         });
-        const response = await request(app).post('/api/login')
+        const response = await request(app).post('/login')
             .set('content-type', 'application/json')
             .send({
                 email: 'test@mail.com',
@@ -72,7 +72,7 @@ describe('User Route', () => {
             email: 'test@mail.com',
             password: 'test123',
         });
-        const response = await request(app).post('/api/login')
+        const response = await request(app).post('/login')
             .set('content-type', 'application/json')
             .send({
                 email: 'notexist@mail.com',
