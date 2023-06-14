@@ -20,7 +20,7 @@ module.exports = {
       });
       await newUser.save();
       
-      return res.redirect("/api/login")
+      return res.redirect("/login")
     } catch (err) {
       next(err)
     }
@@ -101,7 +101,7 @@ module.exports = {
     try {
       const deletedUser = await service.deleteOne(id);
       // req.flash("deleteSuccess", "Your account has been deleted")
-      res.redirect("/api/signup")
+      res.redirect("/signup")
 
     } catch (err) {
       next(err)

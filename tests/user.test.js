@@ -66,7 +66,7 @@ describe('User Route', () => {
             password: 'test123',
         });
         const userId = createUser._id.toString()
-        const login = await request(app).post('/api/login')
+        const login = await request(app).post('/login')
             .send({
                 email: 'test@mail.com',
             })
@@ -92,7 +92,7 @@ describe('User Route', () => {
             password: 'delete123',
         });
         const userId = createUser._id.toString()
-        const login = await request(app).post('/api/login')
+        const login = await request(app).post('/login')
             .send({
                 email: 'delete@mail.com',
             })
@@ -102,7 +102,7 @@ describe('User Route', () => {
             .redirects(0)
 
         expect(response.status).toBe(302);
-        expect(response.headers.location).toMatch("/api/signup")
+        expect(response.headers.location).toMatch("/signup")
     });
 
 });

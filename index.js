@@ -54,10 +54,10 @@ app.use(flash());
 app.set('views', path.join('views'))
 app.set('view engine', 'ejs');
 
-app.get('/api/signup', (req, res) => {
+app.get('/signup', (req, res) => {
   res.render('signup');
 })
-app.get('/api/login', (req, res) => {
+app.get('/login', (req, res) => {
   res.render('login');
 });
 app.get('/api/shortify', authenticateUser, (req, res) => {
@@ -74,7 +74,7 @@ app.get('/api/dashboard', authenticateUser, (req, res) => {
 
 app.get('/logout', authenticateUser, (req, res) => {
   res.clearCookie("token");
-  res.redirect('/api/login');
+  res.redirect('/login');
 });
 app.get('/api/user/update/:id', authenticateUser, (req, res) => {
 
@@ -90,10 +90,10 @@ app.get('/api/user/delete/:id', authenticateUser, (req, res) => {
 
 });
 
-app.use("/api", AuthRoute);
+app.use("/", AuthRoute);
 app.use("/api/user", UserRoute);
 app.use("/api/shortify", UrlRoute);
-app.use("/", RedirectRoute)
+// app.use("/", RedirectRoute)
 
 app.use(function (err, req, res, next) {
   ErrorHandler(err, req, res);
