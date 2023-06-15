@@ -13,6 +13,9 @@ const URLSchema = new mongoose.Schema({
   shortUrl: {
     type: String,
   },
+  historyUrl: {
+    type: String,
+  },
   clicks: {
     type: Number,
     default: 0,
