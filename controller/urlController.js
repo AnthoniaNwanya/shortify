@@ -36,7 +36,7 @@ module.exports = {
                 await user.save();
 
                 const result = savedUrl.urlId;
-                const qrresult = savedUrl.shortUrl;
+                const qrresult = savedUrl.historyUrl;
            
                 QRCode.toDataURL(qrresult, (err, src) => {
                     if (err) res.send("Error occurred");
