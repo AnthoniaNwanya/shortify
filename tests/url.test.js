@@ -164,31 +164,31 @@ describe('Url Route', () => {
 
     });
 
-    // it('redirect to original url onclick of shortened url', async () => {
-    //     const user = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
+    it('redirect to original url onclick of shortened url', async () => {
+        const user = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
 
-    //     const login = await request(app)
-    //         .post('/auth/login')
-    //         .set('content-type', 'application/json')
-    //         .send({ email: 'tonia@mail.com' })
+        const login = await request(app)
+            .post('/auth/login')
+            .set('content-type', 'application/json')
+            .send({ email: 'tonia@mail.com' })
 
-    //     loginToken = login.body.data;
+        loginToken = login.body.data;
 
-    //     const BASE = process.env.BASE;
-    //     const urlId = nanoid(5);
-    //     await UrlSchema.create({
-    //         urlId: urlId,
-    //         origUrl: "https://github.com/AnthoniaNwanya",
-    //         shortUrl: (`${BASE}/${urlId}`),
-    //         User: user.email,
-    //         createdAt: new Date(),
-    //     });
+        const BASE = process.env.BASE;
+        const urlId = nanoid(5);
+        await UrlSchema.create({
+            urlId: urlId,
+            origUrl: "https://github.com/AnthoniaNwanya",
+            shortUrl: (`${BASE}/${urlId}`),
+            User: user.email,
+            createdAt: new Date(),
+        });
 
-    //     const response = await request(app)
-    //         .get('/' + urlId)
+        const response = await request(app)
+            .get('/' + urlId)
 
-    //     expect(response.headers.location).toMatch("https://github.com/AnthoniaNwanya")
-    // });
+        expect(response.headers.location).toMatch("https://github.com/AnthoniaNwanya")
+    });
 
 
 });
