@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === "development") {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const whitelist = [
-  "https://shortify-url-q374.onrender.com/",
+  "https://shortify-web-app.onrender.com",
   "http://localhost:8000",
 ];
 app.use(
@@ -93,16 +93,16 @@ app.get('/api/user/delete/:id', authenticateUser, (req, res) => {
 app.use("/", AuthRoute);
 app.use("/api/user", UserRoute);
 app.use("/api/shortify", UrlRoute);
-// app.use("/", RedirectRoute)
+app.use("/", RedirectRoute)
 
 app.use(function (err, req, res, next) {
   ErrorHandler(err, req, res);
 });
 
-// app.use("*", () => {
-//   throw new ForbiddenError("Invalid Request: Route Not Found")
+app.use("*", () => {
+  throw new ForbiddenError("Invalid Request: Route Not Found")
 
-// });
+});
 
 
 
