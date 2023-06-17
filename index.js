@@ -26,7 +26,7 @@ app.use(limitRate);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const whitelist = [
-  "https://shortify-web-app.onrender.com",
+  "https://tittle.onrender.com",
   "http://localhost:8000",
 ];
 app.use(
