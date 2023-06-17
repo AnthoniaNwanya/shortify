@@ -71,8 +71,8 @@ describe('Url Route', () => {
         expect(response.text).toContain("<p>your generated link is:</p>");
         expect(response.text).toContain(" <span id=\"download-action\">Download QR CODE</span>");
     });
-
-    it('should return "URL already exists" when already existing url is passed', async () => {
+    
+ it('should return "URL already exists" when already existing url is passed', async () => {
 
         await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
         const login = await request(app).post('/login')
@@ -95,14 +95,16 @@ describe('Url Route', () => {
             .send({
                 origUrl: "https://github.com/AnthoniaNwanya",
                 
-            });
+            })
+            .redirects(0)
 
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('message', 'URL already exists');
-        expect(response.body.data).toBe('http://localhost:8000/tonia');
+        expect(response.statusCode).toBe(302);
+        expect(response.text).toContain("Found. Redirecting to /api/shortify/history");
+        expect(response.headers.location).toMatch('/api/shortify/history');
 
     });
 
+   
     it('should throw error when URL is invalid', async () => {
 
         await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
@@ -118,7 +120,8 @@ describe('Url Route', () => {
             .send({
                 origUrl: "www.anyrtwee.com",
                 customId: "tonia"
-            });
+            })
+            .redirects(0)
 
         expect(response.statusCode).toBe(403);
         expect(response.body).toHaveProperty('message','Invalid URL. Enter a valid URL.');
@@ -164,7 +167,7 @@ describe('Url Route', () => {
 
     });
 
-    it('redirect to original url onclick of shortened url', async () => {
+    it('should redirect to original url onclick of shortened url', async () => {
         const user = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
 
         const login = await request(app)

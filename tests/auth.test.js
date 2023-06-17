@@ -43,9 +43,11 @@ describe('User Route', () => {
                 email: 'test@mail.com',
                 password: 'test123',
             })
-
+            .redirects(0)
+        
         expect(response.body).not.toBe(302);
-        expect(response.body).toHaveProperty('message', 'User already exists');
+        expect(response.headers.location).toMatch("/");
+        expect(response.text).toContain("Found. Redirecting to /");
     });
 
     it('should login a user and redirect to home page, with set token in headers', async () => {
@@ -77,8 +79,9 @@ describe('User Route', () => {
             .send({
                 email: 'notexist@mail.com',
             })
-        expect(response.status).toBe(403);
-        expect(response.body).toHaveProperty('message', 'User does not exist');
-        expect(response.body).not.toHaveProperty('data');
+            .redirects(0)
+        expect(response.status).toBe(302);
+        expect(response.headers.location).toMatch("/login")
+        expect(response.text).toContain("Found. Redirecting to /login");
     });
 })
