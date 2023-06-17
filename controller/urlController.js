@@ -14,15 +14,21 @@ module.exports = {
             const origUrl = req.body.origUrl;
             const urlId = req.body.customId || nanoid(5);
             const user = await userService.getOne(req.User.email);
-            const findUrl = await UrlSchema.findOne({ "origUrl": origUrl });
-            if (findUrl) {
-                formatResponse({
-                    res,
-                    statusCode: 200,
-                    data: findUrl.shortUrl,
-                    message: "URL already exists"
-                });
-            } else {
+
+            const findUrl = await UrlSchema.find({ "User": req.User.id });
+            let foundUrls = [];
+            findUrl.forEach((url) => {
+                const urltitle = url.origUrl
+                foundUrls.push(urltitle)
+            })
+
+            if (foundUrls.includes(origUrl)) {
+                req.flash("urlFail", "! This url already exists.")
+                res.redirect("/api/shortify/history")
+            }
+
+            else {
+
                 const newUrl = await urlService.post({
                     urlId: urlId,
                     origUrl: origUrl,
@@ -32,18 +38,20 @@ module.exports = {
                     createdAt: new Date(),
                 });
                 const savedUrl = await newUrl.save();
+
                 user.URLS = user.URLS.concat(savedUrl.shortUrl);
                 await user.save();
 
                 const result = savedUrl.urlId;
                 const qrresult = savedUrl.historyUrl;
-           
+
                 QRCode.toDataURL(qrresult, (err, src) => {
                     if (err) res.send("Error occurred");
                     res.render("result", { shortUrl: result, qrcode: src });
                 })
+            }
 
-            };
+
         } catch (err) {
             next(err)
         };
@@ -57,7 +65,8 @@ module.exports = {
             const urls = await UrlSchema.find({ "User": user })
 
             res.render('urlHistory.ejs', {
-                url: urls
+                url: urls,
+                urlFlash: req.flash('urlFail')
             })
         } catch (err) {
             next(err)

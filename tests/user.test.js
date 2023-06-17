@@ -81,7 +81,7 @@ describe('User Route', () => {
             .redirects(0)
 
         expect(response.status).toBe(302);
-        expect(response.headers.location).toMatch("/api/dashboard");
+        expect(response.headers.location).toMatch("/api/user/update/:id");
 
     });
 

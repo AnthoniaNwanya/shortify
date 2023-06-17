@@ -109,6 +109,9 @@
                     </div>
                     &nbsp; &nbsp;
                 </div>
+                <p style="color: rgb(0, 47, 255);">
+                    <%= updateFlash %>
+                </p>
                 &nbsp;
                 &nbsp;
                 &nbsp;
@@ -116,7 +119,7 @@
                     <button name="Submit" value="Edit" type="submit" id="submit-btn" class="btn btn-primary mr-3">Save
                         Changes</button>
                     &nbsp; &nbsp;
-                    <button class="btn border button">Cancel</button>
+                   <button class="btn border button" onclick="location.href='/api/shortify'">Cancel</button>
                     <input type="hidden" name="_method" value="PUT" />
                 </div>
 

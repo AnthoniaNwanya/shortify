@@ -1,16 +1,6 @@
 const UserSchema = require("../schema/UserSchema");
 const { NotFoundError, BadRequestError, ForbiddenError, ValidationError } = require("../middleware/Error");
 
-const signup = async (data) => {
-    const existingUser = await UserSchema.findOne({ "email": data.email });
-    if (existingUser) {
-        throw new ForbiddenError("User already exists");
-    } else {
-        const createUser = await UserSchema.create(data);
-        return createUser
-    }
-};
-
 const getUsers = async (data) => {
     const users = await UserSchema.find({}, { password: 0 });
     if (!users) {
@@ -51,7 +41,6 @@ const deleteOne = async (id) => {
 
 };
 module.exports = {
-    signup,
     getUsers,
     getOne,
     updateOne,

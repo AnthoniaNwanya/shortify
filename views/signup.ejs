@@ -24,7 +24,7 @@
 							</div>
 							<span class="error email-error">
 								<i class="bx bx-error-circle error-icon"></i>
-								<p class="error-text">Please enter a valid email</p>
+								<p class="error-text">Enter a valid email</p>
 							</span>
 						</div>
 						<div class="field create-password">
@@ -36,17 +36,21 @@
 							<span class="error password-error">
 								<i class="bx bx-error-circle error-icon"></i>
 								<p class="error-text">
-									Please enter atleast 8 charatcer with number, symbol, small and
+									Enter atleast 6 character with digit, symbol and
 									capital letter.
 								</p>
 							</span>
 						</div>
-						<button class="submit">Create an account</button>
-						<p>
-						<div>
-							Already a member? <a href="/login">Log in</a>
-						</div>
-						</p>
+					
+							<p style="color: rgb(255, 0, 0);"><%= signupFlash %>
+							</p>
+				
+								<button class="submit">Create an account</button>
+								<p>
+								<div>
+									Already a member? <a href="/login">Log in</a>
+								</div>
+								</p>
 					</form>
 				</div>
 			</div>

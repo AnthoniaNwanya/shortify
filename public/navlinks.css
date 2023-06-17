@@ -181,6 +181,7 @@ nav.open ~ .overlay {
 .histtable th {
   font-size: 0.85em;
   letter-spacing: 0.1em;
+  font-weight: bold;
 }
 
 @media screen and (max-width: 600px) {
@@ -201,8 +202,12 @@ nav.open ~ .overlay {
     padding: 0;
     position: absolute;
     width: 1px;
+    font-weight: 900;
   }
-
+  thead tr {
+    border-bottom: 10px solid white;
+    font-weight: 900;
+  }
   .histtable tr {
     border-bottom: 3px solid #ddd;
     display: block;
