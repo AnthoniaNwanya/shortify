@@ -33,7 +33,7 @@ module.exports = {
                     urlId: urlId,
                     origUrl: origUrl,
                     shortUrl: `${BaseUrl}/${urlId}`,
-                    historyUrl: `https://shortify-web-app.onrender.com/${urlId}`,
+                    historyUrl: `https://tittle.onrender.com/${urlId}`,
                     User: user._id,
                     createdAt: new Date(),
                 });

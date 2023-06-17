@@ -3,7 +3,6 @@ const UserSchema = require("../schema/UserSchema");
 const formatResponse = require("../middleware/Response");
 const { ForbiddenError } = require("../middleware/Error");
 const jwt = require("jsonwebtoken");
-const Cache = require('../config/redis');
 
 module.exports = {
 
