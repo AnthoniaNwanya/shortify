@@ -3,7 +3,7 @@ const UserSchema = require("../schema/UserSchema");
 const formatResponse = require("../middleware/Response");
 const { ForbiddenError } = require("../middleware/Error");
 const jwt = require("jsonwebtoken");
-
+const Cache = require('../config/redis');
 
 module.exports = {
 
@@ -11,16 +11,21 @@ module.exports = {
 
     try {
       const { username, email, password } = req.body;
-
-      const newUser = await service.signup({
-        username: username,
-        email: email,
-        password: password,
-        createdAt: new Date(),
-      });
-      await newUser.save();
-      
-      return res.redirect("/login")
+      const existingUser = await UserSchema.findOne({ "email": email });
+      if (existingUser) {
+        req.flash("signupFail", "! Account with this email already exists.")
+        res.redirect("/")
+      }
+      else {
+        const newUser = await UserSchema.create({
+          username: username,
+          email: email,
+          password: password,
+          createdAt: new Date(),
+        });
+        await newUser.save();
+        return res.redirect("/login")
+      }
     } catch (err) {
       next(err)
     }
@@ -32,16 +37,19 @@ module.exports = {
 
       const existingUser = await UserSchema.findOne({ "email": email });
       if (!existingUser) {
-        throw new ForbiddenError("User does not exist");
-      };
-      const signWith = { id: existingUser._id, username: existingUser.username, email: existingUser.email, password: existingUser.password};
-      const token = jwt.sign(signWith, process.env.TOKEN_KEY, { expiresIn: "1h" });
+        req.flash("loginFail", "! User does not exist.")
+        res.redirect("/login")
+      } else {
 
-      res.cookie("token", token, {
-        httpOnly: true,
-      })
-      return res.redirect("/api/shortify")
-      
+        const signWith = { id: existingUser._id, username: existingUser.username, email: existingUser.email, password: existingUser.password };
+        const token = jwt.sign(signWith, process.env.TOKEN_KEY, { expiresIn: "1h" });
+
+        res.cookie("token", token, {
+          httpOnly: true,
+        })
+        return res.redirect("/api/shortify")
+
+      }
     } catch (err) {
       next(err)
     }
@@ -80,16 +88,16 @@ module.exports = {
 
   updateOne: async (req, res, next) => {
     const id = req.params.id;
-    const {username, email, password} = req.body;
-  
+    const { username, email, password } = req.body;
+
     try {
-      const updatedUser = await service.updateOne(id, {
+      await service.updateOne(id, {
         username: username,
         email: email,
         password: password,
       });
-      // req.flash("Account update has been saved!")
-      res.redirect("/api/dashboard")
+      req.flash("updateSuccess", "Settings saved successfully!")
+      res.redirect("/api/user/update/:id")
 
     } catch (err) {
       next(err)
@@ -99,8 +107,7 @@ module.exports = {
   deleteOne: async (req, res, next) => {
     const id = req.params.id
     try {
-      const deletedUser = await service.deleteOne(id);
-      // req.flash("deleteSuccess", "Your account has been deleted")
+      await service.deleteOne(id);
       res.redirect("/")
 
     } catch (err) {

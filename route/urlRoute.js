@@ -3,7 +3,7 @@ const controller = require("../controller/urlController");
 const router = express.Router();
 const {authenticateUser} = require("../middleware/authentication");
 
-router.post("/", authenticateUser,  controller.post);
+router.post("/", authenticateUser, controller.post);
 router.get("/history", authenticateUser, controller.urlHistory);
 router.get("/analytics", authenticateUser, controller.urlAnalytics);
 
