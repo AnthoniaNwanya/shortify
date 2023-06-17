@@ -30,7 +30,7 @@ eyeIcon.addEventListener("click", () => {
 
 function createPass() {
 const passPattern =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
 if (!passInput.value.match(passPattern)) {
     return passField.classList.add("invalid"); 

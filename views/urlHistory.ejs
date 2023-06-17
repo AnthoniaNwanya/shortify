@@ -83,34 +83,40 @@
     <div>
         <div>
             <div>
-    
-                        <i class="bx bx-folder-open icon">URL HISTORY </i>
-                        <table class="histtable">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Original URL</th>
-                                    <th scope="col">Short URL</th>
-                                    <th scope="col">Created</th>
-                                </tr>
-                            </thead>
-                            <% for (var i=0; i < url.length; i++) { %>
-                                <% let splitOrig1=url[i].origUrl.split("/", 3).join("/") %>
-                                    <% let origUrl=splitOrig1[1] %>
-                                        <tbody>
-                                            <tr>
-                                                <td data-label="Original URL:">
-                                                    <%= splitOrig1%>
-                                                </td>
-                                                <td data-label="Short URL:">
-                                                   <a href="<%= url[i].historyUrl%> "> <%= url[i].urlId%> </a>
-                                                </td>
-                                                <td data-label="Created:">
-                                                    <%= url[i].createdAt%>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <% } %>
-                        </table>
+                <p style="color: rgb(255, 0, 0);"><%= urlFlash %>
+                </p>
+                <i class="bx bx-folder-open icon">URL HISTORY </i>
+                <table class="histtable">
+                    <thead>
+                        <tr style="font-weight:900;">
+                            <th scope="col">Original URL</th>
+                            <th scope="col">Short URL</th>
+                            <th scope="col">Created</th>
+                        </tr>
+                    </thead>
+                    <% for (var i=0; i < url.length; i++) { %>
+                        <% let splitOrig1=url[i].origUrl.split("/", 3).join("/") %>
+                            <% let origUrl=splitOrig1[1] %>
+                                <tbody>
+                                    <tr>
+                                        <td data-label="Original URL:">
+                                            &nbsp; &nbsp;
+                                            <%= splitOrig1%>
+                                        </td>
+                                        <td data-label="Short URL:">
+                                            &nbsp; &nbsp;
+                                            <a href="<%= url[i].historyUrl%> ">
+                                                <%= url[i].urlId%>
+                                            </a>
+                                        </td>
+                                        <td data-label="Created:">
+                                            &nbsp; &nbsp;
+                                            <%= url[i].createdAt%>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <% } %>
+                </table>
             </div>
         </div>
     </div>
