@@ -47,7 +47,11 @@ module.exports = {
 
                 QRCode.toDataURL(qrresult, (err, src) => {
                     if (err) res.send("Error occurred");
-                    res.render("result", { shortUrl: result, qrcode: src });
+                    res.render("result", {
+                        user: req.User,
+                        shortUrl: result,
+                        qrcode: src
+                    });
                 })
             }
 
@@ -65,6 +69,7 @@ module.exports = {
             const urls = await UrlSchema.find({ "User": user })
 
             res.render('urlHistory.ejs', {
+                user: req.User,
                 url: urls,
                 urlFlash: req.flash('urlFail')
             })
@@ -79,6 +84,7 @@ module.exports = {
             const urls = await UrlSchema.find({ "User": user })
 
             res.render('analytics.ejs', {
+                user: req.User,
                 url: urls
             })
 

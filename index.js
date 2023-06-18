@@ -73,13 +73,11 @@ app.get('/api/dashboard', authenticateUser, (req, res) => {
     user: req.User
   });
 });
-
 app.get('/logout', authenticateUser, (req, res) => {
   res.clearCookie("token");
   res.redirect('/login');
 });
 app.get('/api/user/update/:id', authenticateUser, (req, res) => {
-
   res.render('settings', {
     user: req.User,
     updateFlash: req.flash('updateSuccess')
