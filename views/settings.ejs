@@ -86,7 +86,7 @@
                     <p>Accepted file type .png. Less than 1MB</p>
                 </div>
             </div>
-            <div class="py-2">
+            <div >
                 <div class="row py-2">
                     <div class="col-md-6">
                         <label for="username">Username</label>
@@ -94,18 +94,28 @@
                         <input type="text" name="username" class="bg-light form-control" value="<%= user.username %>">
                     </div>
                     &nbsp; &nbsp;
-                    <div class="col-md-6 pt-md-0 pt-3">
+                    <div class="col-md-6 pt-md-0 pt-3" class="field email-field">
                         <label for="email">Email</label>
                         &nbsp; &nbsp;
-                        <input type="text" name="email" class="bg-light form-control" value="<%= user.email %>">
+                        <input type="text" class="email" name="email" class="bg-light form-control" value="<%= user.email %>">
+                        <span class="error email-error">
+                            <i class="bx bx-error-circle error-icon"></i>
+                            <p class="error-text">Enter a valid email</p>
+                        </span>
                     </div>
                     &nbsp; &nbsp;
                 </div>
                 <div class="row py-2">
-                    <div class="col-md-6">
+                    <div class="col-md-6" class="field create-password">
                         <label for="password">Password</label>
                         &nbsp; &nbsp;
-                        <input type="text" name="password" class="bg-light form-control" value="<%= user.password %>">
+                        <input type="text" class="password" name="password" class="bg-light form-control" value="<%= user.password %>">
+                        <span class="error password-error">
+                            <i class="bx bx-error-circle error-icon"></i>
+                            <p class="error-text">
+                                Password must have atleast 8 characters and contain atleast one uppercase, a number and a symbol.
+                            </p>
+                        </span>
                     </div>
                     &nbsp; &nbsp;
                 </div>
