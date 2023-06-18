@@ -14,14 +14,14 @@ const RedirectRoute = require("./route/redirectRoute");
 const ErrorHandler = require("./middleware/ErrorHandler");
 const { authenticateUser } = require("./middleware/authentication");
 const { ForbiddenError } = require("./middleware/Error");
-const limitRate = require("./middleware/rateLimiter");
+const {rateLimiter} = require("./middleware/limiter");
+
 
 const app = express();
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
-
-app.use(limitRate);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -95,7 +95,7 @@ app.get('/api/user/delete/:id', authenticateUser, (req, res) => {
 
 app.use("/", AuthRoute);
 app.use("/api/user", UserRoute);
-app.use("/api/shortify", UrlRoute);
+app.use("/api/shortify", rateLimiter, UrlRoute);
 app.use("/", RedirectRoute)
 
 app.use(function (err, req, res, next) {
