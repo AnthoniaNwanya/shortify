@@ -36,21 +36,22 @@
 							<span class="error password-error">
 								<i class="bx bx-error-circle error-icon"></i>
 								<p class="error-text">
-									Enter atleast 6 character with digit, symbol and
-									capital letter.
+									Password must have atleast 8 characters and contain atleast one uppercase, a number
+									and a symbol.
 								</p>
 							</span>
 						</div>
-					
-							<p style="color: rgb(255, 0, 0);"><%= signupFlash %>
-							</p>
-				
-								<button class="submit">Create an account</button>
-								<p>
-								<div>
-									Already a member? <a href="/login">Log in</a>
-								</div>
-								</p>
+
+						<p style="color: rgb(255, 0, 0);">
+							<%= signupFlash %>
+						</p>
+
+						<button class="submit">Create an account</button>
+						<p>
+						<div>
+							Already a member? <a href="/login">Log in</a>
+						</div>
+						</p>
 					</form>
 				</div>
 			</div>
