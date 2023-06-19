@@ -27,6 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const whitelist = [
   "https://tittle.onrender.com",
+  "https://tittle.stoplight.io",
   "http://localhost:8000",
 ];
 app.use(

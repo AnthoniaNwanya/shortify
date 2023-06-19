@@ -28,7 +28,7 @@ describe('User Route', () => {
         expect(response.headers.location).toMatch("/login")
     });
 
-        it('should throw error if user already exists ', async () => {
+    it('should throw error/not redirect login if user already exists ', async () => {
          await request(app).post('/')
             .set('content-type', 'application/json')
             .send({
@@ -45,8 +45,9 @@ describe('User Route', () => {
             })
             .redirects(0)
         
-        expect(response.body).not.toBe(302);
-        expect(response.headers.location).toMatch("/");
+        expect(response.status).toBe(302);
+        expect(response.headers.location).toMatch("/")
+        expect(response.headers.location).not.toMatch("/login");
         expect(response.text).toContain("Found. Redirecting to /");
     });
 
@@ -68,7 +69,7 @@ describe('User Route', () => {
 
     });
 
-    it('should throw error on incorrect login', async () => {
+    it('should throw error/not redirect homepage on incorrect login', async () => {
         const user = await UserSchema.create({
             username: 'testname',
             email: 'test@mail.com',
@@ -82,6 +83,7 @@ describe('User Route', () => {
             .redirects(0)
         expect(response.status).toBe(302);
         expect(response.headers.location).toMatch("/login")
+        expect(response.headers.location).not.toMatch("/api/shortify");
         expect(response.text).toContain("Found. Redirecting to /login");
     });
 })
