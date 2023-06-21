@@ -25,12 +25,19 @@
 								<p class="error-text">Please enter a valid email</p>
 							</span>
 						</div>
+						<div class="field create-password"> <i class="bi bi-eye-slash" id="togglePassword"></i>
+
+							<input type="password" required class="password" name="password" id="password"
+								placeholder="Password">
+				
+
+						</div>
 
 						<p style="color: rgb(255, 0, 0);">
 							<%= loginFlash %>
 						</p>
 
-						<button class="submit" onclick="getToken()">Let's Go</button>
+						<button class="submit" >Let's Go</button>
 
 						<p>
 						<div>

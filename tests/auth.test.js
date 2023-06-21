@@ -61,6 +61,7 @@ describe('User Route', () => {
             .set('content-type', 'application/json')
             .send({
                 email: 'test@mail.com',
+                password: 'test123',
             })
         const cookies = response.headers['set-cookie']
 
@@ -79,6 +80,7 @@ describe('User Route', () => {
             .set('content-type', 'application/json')
             .send({
                 email: 'notexist@mail.com',
+                password: 'notexistpass123',
             })
             .redirects(0)
         expect(response.status).toBe(302);

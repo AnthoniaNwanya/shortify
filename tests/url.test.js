@@ -19,6 +19,7 @@ describe('Url Route', () => {
         const login = await request(app).post('/login')
             .send({
                 email: 'tonia@mail.com',
+                password: '123456'
             })
         loginResponse = login.headers['set-cookie'];
     });
@@ -55,6 +56,7 @@ describe('Url Route', () => {
         const login = await request(app).post('/login')
             .send({
                 email: 'tonia@mail.com',
+                password: '123456',
             })
         loginResponse = login.headers['set-cookie'];
         const response = await request(app)
@@ -78,6 +80,7 @@ describe('Url Route', () => {
         const login = await request(app).post('/login')
             .send({
                 email: 'tonia@mail.com',
+                password: '123456'
             })
         loginResponse = login.headers['set-cookie'];
         await request(app)
@@ -111,6 +114,7 @@ describe('Url Route', () => {
         const login = await request(app).post('/login')
             .send({
                 email: 'tonia@mail.com',
+                password: '123456'
             })
         loginResponse = login.headers['set-cookie'];
         const response = await request(app)
@@ -150,6 +154,7 @@ describe('Url Route', () => {
         const login = await request(app).post('/login')
             .send({
                 email: 'tonia@mail.com',
+                password: '123456'
             })
         loginResponse = login.headers['set-cookie'];
 
@@ -173,7 +178,10 @@ describe('Url Route', () => {
         const login = await request(app)
             .post('/auth/login')
             .set('content-type', 'application/json')
-            .send({ email: 'tonia@mail.com' })
+            .send({ 
+                email: 'tonia@mail.com',
+                password: '123456'
+            })
 
         loginToken = login.body.data;
 

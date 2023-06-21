@@ -15,7 +15,7 @@ module.exports = {
         req.flash("signupFail", "! Account with this email already exists.")
         res.redirect("/")
       }
-      else {
+      if (!existingUser) {
         const newUser = await UserSchema.create({
           username: username,
           email: email,
@@ -32,22 +32,19 @@ module.exports = {
 
   login: async (req, res, next) => {
     try {
-      const { email } = req.body;
+      const { email, password } = req.body;
+      const existingUser = await UserSchema.findOne({ "email": email, "password": password });
 
-      const existingUser = await UserSchema.findOne({ "email": email });
       if (!existingUser) {
-        req.flash("loginFail", "! User does not exist.")
+        req.flash("loginFail", "! User does not exist. Cross-check email or password")
         res.redirect("/login")
       } else {
-
         const signWith = { id: existingUser._id, username: existingUser.username, email: existingUser.email, password: existingUser.password };
         const token = jwt.sign(signWith, process.env.TOKEN_KEY, { expiresIn: "1h" });
-
         res.cookie("token", token, {
           httpOnly: true,
         })
         return res.redirect("/api/shortify")
-
       }
     } catch (err) {
       next(err)
