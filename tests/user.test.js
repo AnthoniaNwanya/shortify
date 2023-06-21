@@ -69,6 +69,7 @@ describe('User Route', () => {
         const login = await request(app).post('/login')
             .send({
                 email: 'test@mail.com',
+                password: 'test123',
             })
         const loginResponse = login.headers['set-cookie'];
         const response = await request(app).post('/api/user/update/' + userId)
@@ -95,6 +96,7 @@ describe('User Route', () => {
         const login = await request(app).post('/login')
             .send({
                 email: 'delete@mail.com',
+                password: 'test123',
             })
         const loginResponse = login.headers['set-cookie'];
         const response = await request(app).post('/api/user/delete/' + userId)
