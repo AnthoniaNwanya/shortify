@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
 body {
   box-sizing: border-box;
   margin: 0;
@@ -16,7 +17,7 @@ img {
 }
 .login_box {
   width: 97%;
-  height: 90%;
+  height: 98%;
   position: absolute;
   display: flex;
   justify-content: center;
@@ -39,10 +40,15 @@ img {
   width: 59%;
   height: 100%;
 }
-form .field {
-  margin-bottom: 20px;
-}
 
+.input-field input {
+  height: 100%;
+  outline:  none;
+  border: none;
+  border-radius:  8px;
+  padding: 0 15px;
+  border: 1px solid #d1d1d1;
+}
 .invalid input {
   border-color: #d93025;
 }
@@ -55,6 +61,9 @@ form .field {
   color: #919191;
   cursor: pointer;
   padding: 3px;
+}
+form i {
+  cursor: pointer;
 }
 .field .error {
   display: flex;
@@ -112,7 +121,7 @@ form .field {
   border-radius: 8px;
   display: block;
   /* margin: auto; */
-  margin-top: 50px;
+  margin-top: 10px;
   background: #583672;
   color: #fff;
   font-weight: bold;
@@ -120,7 +129,11 @@ form .field {
   -moz-box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
   box-shadow: 0px 9px 15px -11px rgba(88, 54, 114, 1);
 }
-
+@media (max-width: 850px) {
+  .submit {
+    padding: 8px 40px;
+  }
+}
 .right {
   background: linear-gradient(
       212.38deg,
