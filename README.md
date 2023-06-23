@@ -6,20 +6,20 @@ A URL shortener
 A QRcode result generator for shortened URLs, built for easy link download and share.
 
 ## Built With:
-```html
-<p style="color: green;">Node.js</p>
+```diff
++Node.js
+```
+
+```diff
+-Express.js
+```
+
+```diff
+! Ejs 
 ```
 
 ```html
-<p style="color: blue;">Express.js</p>
-```
-
-```html
-<p style="color: red;">Ejs</p>
-```
-
-```html
-<p style="color: red;">MongoDB</p>
+@@ MongoDB (and bold)@@
 ```
 
 ## Clone this Repo:

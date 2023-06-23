@@ -1,7 +1,7 @@
 const request = require('supertest');
 const { connect } = require('./database');
-const UserSchema = require('../schema/UserSchema');
-const app = require('../index');
+const UserSchema = require('../../schema/UserSchema');
+const app = require('../../index');
 require("dotenv").config();
 
 describe('User Route', () => {
@@ -29,7 +29,7 @@ describe('User Route', () => {
     });
 
     it('should throw error/not redirect login if user already exists ', async () => {
-         await request(app).post('/')
+        await request(app).post('/')
             .set('content-type', 'application/json')
             .send({
                 username: 'testname',
@@ -44,7 +44,7 @@ describe('User Route', () => {
                 password: 'test123',
             })
             .redirects(0)
-        
+
         expect(response.status).toBe(302);
         expect(response.headers.location).toMatch("/")
         expect(response.headers.location).not.toMatch("/login");

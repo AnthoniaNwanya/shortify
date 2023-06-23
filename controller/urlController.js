@@ -6,6 +6,7 @@ const { nanoid } = require("nanoid");
 const formatResponse = require("../middleware/Response");
 const IP = require('ip');
 const QRCode = require("qrcode");
+const Cache = require('../config/redis');
 
 module.exports = {
     post: async (req, res, next) => {
@@ -38,6 +39,9 @@ module.exports = {
                     createdAt: new Date(),
                 });
                 const savedUrl = await newUrl.save();
+                
+                const cacheKey = req.originalUrl;
+                Cache.redis.set(cacheKey, JSON.stringify(savedUrl));
 
                 user.URLS = user.URLS.concat(savedUrl.shortUrl);
                 await user.save();

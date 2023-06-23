@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --runInBand --detectOpenHandles --testTimeout=30000",
+    "test:watch": "npm run test -- --watch",
     "start": "nodemon app.js"
   },
   "repository": {
@@ -34,7 +35,8 @@
     "mongodb-memory-server": "^8.12.2",
     "mongoose": "^7.0.2",
     "nanoid": "^3.3.4",
-    "qrcode": "^1.5.3"
+    "qrcode": "^1.5.3",
+    "redis": "^4.6.7"
   },
   "devDependencies": {
     "jest": "^29.5.0",
