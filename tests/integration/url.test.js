@@ -1,9 +1,9 @@
 require("dotenv").config();
 const request = require('supertest');
 const { connect } = require('./database');
-const UserSchema = require('../schema/UserSchema');
-const UrlSchema = require('../schema/UrlSchema');
-const app = require('../index');
+const UserSchema = require('../../schema/UserSchema');
+const UrlSchema = require('../../schema/UrlSchema');
+const app = require('../../index');
 const { nanoid } = require("nanoid");
 
 
@@ -73,8 +73,8 @@ describe('Url Route', () => {
         expect(response.text).toContain("<p>your generated link is:</p>");
         expect(response.text).toContain(" <span id=\"download-action\">Download QR CODE</span>");
     });
-    
- it('should return "URL already exists" when already existing url is passed', async () => {
+
+    it('should return "URL already exists" when already existing url is passed', async () => {
 
         await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
         const login = await request(app).post('/login')
@@ -97,7 +97,7 @@ describe('Url Route', () => {
             .set('Cookie', loginResponse)
             .send({
                 origUrl: "https://github.com/AnthoniaNwanya",
-                
+
             })
             .redirects(0)
 
@@ -107,7 +107,7 @@ describe('Url Route', () => {
 
     });
 
-   
+
     it('should throw error when URL is invalid', async () => {
 
         await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
@@ -128,7 +128,7 @@ describe('Url Route', () => {
             .redirects(0)
 
         expect(response.statusCode).toBe(403);
-        expect(response.body).toHaveProperty('message','Invalid URL. Enter a valid URL.');
+        expect(response.body).toHaveProperty('message', 'Invalid URL. Enter a valid URL.');
         expect(response.body.data).not.toBe('http://localhost:8000/tonia');
 
     });
@@ -168,7 +168,7 @@ describe('Url Route', () => {
         expect(response.text).toContain("<th scope=\"col\">Original URL</th>");
         expect(response.text).toContain("<th scope=\"col\">Short URL</th>");
         expect(response.text).toContain("<th scope=\"col\">Created</th>");
-       
+
 
     });
 
@@ -178,7 +178,7 @@ describe('Url Route', () => {
         const login = await request(app)
             .post('/auth/login')
             .set('content-type', 'application/json')
-            .send({ 
+            .send({
                 email: 'tonia@mail.com',
                 password: '123456'
             })

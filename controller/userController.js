@@ -3,6 +3,7 @@ const UserSchema = require("../schema/UserSchema");
 const formatResponse = require("../middleware/Response");
 const { ForbiddenError } = require("../middleware/Error");
 const jwt = require("jsonwebtoken");
+const Cache = require('../config/redis');
 
 module.exports = {
 
@@ -23,6 +24,9 @@ module.exports = {
           createdAt: new Date(),
         });
         await newUser.save();
+        const cacheKey = req.originalUrl;
+        Cache.redis.set(cacheKey, JSON.stringify(newUser));
+        
         return res.redirect("/login")
       }
     } catch (err) {

@@ -14,7 +14,7 @@ const RedirectRoute = require("./route/redirectRoute");
 const ErrorHandler = require("./middleware/ErrorHandler");
 const { authenticateUser } = require("./middleware/authentication");
 const { ForbiddenError } = require("./middleware/Error");
-const {rateLimiter} = require("./middleware/limiter");
+const rateLimit = require("./middleware/limiter");
 
 
 const app = express();
@@ -25,6 +25,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(rateLimit)
 const whitelist = [
   "https://tittle.onrender.com",
   "https://tittle.stoplight.io",
@@ -36,7 +37,7 @@ app.use(
     headers: ["Content-Type"],
     credentials: true,
   })
-);
+  );
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -53,7 +54,6 @@ app.use(express.static('public'));
 app.use(flash());
 app.set('views', path.join('views'))
 app.set('view engine', 'ejs');
-
 app.get('/', (req, res) => {
   res.render('signup', {
     signupFlash: req.flash('signupFail')
@@ -94,7 +94,7 @@ app.get('/api/user/delete/:id', authenticateUser, (req, res) => {
 
 app.use("/", AuthRoute);
 app.use("/api/user", UserRoute);
-app.use("/api/shortify", rateLimiter, UrlRoute);
+app.use("/api/shortify", UrlRoute);
 app.use("/", RedirectRoute)
 
 app.use(function (err, req, res, next) {
