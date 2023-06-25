@@ -79,11 +79,12 @@
             <div class="url-shorten-feature">
                 <form action="/api/shortify" method="post" class="url-shorten-form" id="url-shorten-form">
                     <div>
-                        <input type="text" class="url-input" placeholder="Shorten a link here..." name="origUrl"
-                            autocomplete="off" 
-                            />
-                       
-                        </div>
+                        <p style="color: rgb(216, 25, 25); font-variant: small-caps;">
+                            <%= invalidFlash %>
+                                <input type="text" class="url-input" placeholder="Shorten a link here..." name="origUrl"
+                                    autocomplete="off" />
+                        </p>
+                    </div>
                     <input type="text" class="url-input-span" placeholder="Customize short link?" name="customId">
                     <button type="submit" class="btn btn-lg btn-plus-icon">shorten it!</button>
                 </form>
