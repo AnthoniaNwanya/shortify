@@ -1,10 +1,7 @@
 require("dotenv").config();
 const Redis = require('redis');
 
-const REDIS_USERNAME = process.env.REDIS_USERNAME
-const REDIS_PORT = process.env.REDIS_PORT
-const REDIS_HOST = process.env.REDIS_HOST 
-const REDIS_PASSWORD = process.env.REDIS_PASSWORD
+const REDIS_URL = process.env.REDIS_URL
 
 class Cache {
     constructor() {
@@ -15,7 +12,7 @@ class Cache {
     async connect() {
         try {
             this.redis = await Redis.createClient({
-                url: `redis://${REDIS_USERNAME}:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}`
+                url: REDIS_URL
             });
 
             this.redis.connect()
@@ -24,8 +21,8 @@ class Cache {
                 console.log('Redis connected')
             })
 
-            this.redis.on('error', () => {
-                console.log('Redis connection error')
+            this.redis.on('error', (err) => {
+                console.log(err)
             })
 
     

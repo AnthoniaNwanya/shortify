@@ -28,8 +28,7 @@ app.use(rateLimit)
 const whitelist = [
   "https://tittle.onrender.com",
   "https://tittle.stoplight.io",
-  "http://localhost:8000",
-  "redis://red-cic9ogqip7vnjjic7sm0:6379"
+  "http://localhost:8000",n
 ];
 app.use(
   cors({
