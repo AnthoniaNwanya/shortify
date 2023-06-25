@@ -24,8 +24,10 @@ module.exports = {
           createdAt: new Date(),
         });
         await newUser.save();
-        const cacheKey = req.originalUrl;
-        Cache.redis.set(cacheKey, JSON.stringify(newUser));
+        if (process.env.NODE_ENV !== 'test') {
+          const cacheKey = req.originalUrl;
+          Cache.redis.set(cacheKey, JSON.stringify(newUser));
+        }
         
         return res.redirect("/login")
       }

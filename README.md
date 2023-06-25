@@ -7,19 +7,10 @@ A QRcode result generator for shortened URLs, built for easy link download and s
 
 ## Built With:
 ```diff
-+Node.js
-```
-
-```diff
--Express.js
-```
-
-```diff
-! Ejs 
-```
-
-```html
-@@ MongoDB (and bold)@@
+Node.js
+Express.js
+Ejs 
+MongoDB
 ```
 
 ## Clone this Repo:
@@ -31,12 +22,19 @@ A QRcode result generator for shortened URLs, built for easy link download and s
 `npm install`
 
 ## Start App:
+prod:
 
 `npm run start`
 
-## Test:
+dev:
 
+`npm run dev`
+
+## Test:
 `npm run test`
+
+`npm run test:watch`
+
 
 ## Schemas:
 #### User Schema

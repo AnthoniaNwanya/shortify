@@ -1,9 +1,9 @@
 require("dotenv").config();
 const request = require('supertest');
+const app = require('../../index');
 const { connect } = require('./database');
 const UserSchema = require('../../schema/UserSchema');
 const UrlSchema = require('../../schema/UrlSchema');
-const app = require('../../index');
 const { nanoid } = require("nanoid");
 
 
@@ -12,7 +12,8 @@ describe('Url Route', () => {
     let loginResponse;
 
     beforeAll(async () => {
-        conn = await connect()
+        conn = await connect();
+        // await redisService.connect();
 
         await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
 
@@ -29,7 +30,8 @@ describe('Url Route', () => {
     })
 
     afterAll(async () => {
-        await conn.disconnect()
+        await conn.disconnect();
+        // await redisService.quit();
     })
 
     it('generate random shortened url', async () => {
@@ -126,9 +128,9 @@ describe('Url Route', () => {
                 customId: "tonia"
             })
             .redirects(0)
-
-        expect(response.statusCode).toBe(403);
-        expect(response.body).toHaveProperty('message', 'Invalid URL. Enter a valid URL.');
+            console.log(response.text)
+        expect(response.statusCode).toBe(302);
+        expect(response.text).toContain('Found. Redirecting to /api/shortify');
         expect(response.body.data).not.toBe('http://localhost:8000/tonia');
 
     });

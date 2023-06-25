@@ -16,7 +16,6 @@ const { authenticateUser } = require("./middleware/authentication");
 const { ForbiddenError } = require("./middleware/Error");
 const rateLimit = require("./middleware/limiter");
 
-
 const app = express();
 
 if (process.env.NODE_ENV !== 'production') {
@@ -66,6 +65,7 @@ app.get('/login', (req, res) => {
 });
 app.get('/api/shortify', authenticateUser, (req, res) => {
   res.render('home', {
+    invalidFlash: req.flash('urlInvalid'),
     user: req.User
   });
 });

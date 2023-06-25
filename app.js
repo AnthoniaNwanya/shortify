@@ -1,5 +1,5 @@
 const app = require("./index");
-const { MongoDB } = require("./MongoDB");
+const { MongoDB } = require("./config/MongoDB");
 const Cache = require("./config/redis")
 const PORT = process.env.PORT || 8000;
 

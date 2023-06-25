@@ -1,11 +1,12 @@
 const request = require('supertest');
+const app = require('../../index');
 const { connect } = require('./database');
 const UserSchema = require('../../schema/UserSchema');
-const app = require('../../index');
 
 describe('User Route', () => {
     let conn;
     let user;
+    
     beforeAll(async () => {
         conn = await connect();
         const createuser = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
@@ -14,6 +15,7 @@ describe('User Route', () => {
 
     afterEach(async () => {
         await conn.cleanup();
+        
     })
 
     afterAll(async () => {
