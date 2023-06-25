@@ -22,12 +22,19 @@ MongoDB
 `npm install`
 
 ## Start App:
+prod:
 
 `npm run start`
 
-## Test:
+dev:
 
+`npm run dev`
+
+## Test:
 `npm run test`
+
+`npm run test:watch`
+
 
 ## Schemas:
 #### User Schema
