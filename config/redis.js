@@ -10,7 +10,8 @@ class Cache {
     constructor() {
         this.redis = null;
     }
-
+    
+    
     async connect() {
         try {
             this.redis = await Redis.createClient({
@@ -32,7 +33,7 @@ class Cache {
             console.log(error)
         }
 
-    }
+}
 }
 
 const instance = new Cache();
