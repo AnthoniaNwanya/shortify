@@ -6,6 +6,7 @@ const { nanoid } = require("nanoid");
 const formatResponse = require("../middleware/Response");
 const IP = require('ip');
 const QRCode = require("qrcode");
+const { isValidHttpUrl } = require("../middleware/validateUrl");
 const Cache = require('../config/redis');
 
 module.exports = {
@@ -16,51 +17,59 @@ module.exports = {
             const urlId = req.body.customId || nanoid(5);
             const user = await userService.getOne(req.User.email);
 
-            const findUrl = await UrlSchema.find({ "User": req.User.id });
-            let foundUrls = [];
-            findUrl.forEach((url) => {
-                const urltitle = url.origUrl
-                foundUrls.push(urltitle)
-            })
+            if (isValidHttpUrl(origUrl) !== true) {
+                req.flash("urlInvalid", " ! invalid url. enter a valid url.")
+                res.redirect("/api/shortify")
 
-            if (foundUrls.includes(origUrl)) {
-                req.flash("urlFail", "! This url already exists.")
-                res.redirect("/api/shortify/history")
-            }
+            } else {
 
-            else {
-
-                const newUrl = await urlService.post({
-                    urlId: urlId,
-                    origUrl: origUrl,
-                    shortUrl: `${BaseUrl}/${urlId}`,
-                    historyUrl: `https://tittle.onrender.com/${urlId}`,
-                    User: user._id,
-                    createdAt: new Date(),
-                });
-                const savedUrl = await newUrl.save();
-                
-                const cacheKey = req.originalUrl;
-                Cache.redis.set(cacheKey, JSON.stringify(savedUrl));
-
-                user.URLS = user.URLS.concat(savedUrl.shortUrl);
-                await user.save();
-
-                const resultLink = savedUrl.urlId;
-                const resultText = savedUrl.historyUrl;
-                const qrresult = savedUrl.historyUrl;
-
-                QRCode.toDataURL(qrresult, (err, src) => {
-                    if (err) res.send("Error occurred");
-                    res.render("result", {
-                        user: req.User,
-                        linkUrl: resultLink,
-                        textUrl: resultText,
-                        qrcode: src
-                    });
+                const findUrl = await UrlSchema.find({ "User": req.User.id });
+                let foundUrls = [];
+                findUrl.forEach((url) => {
+                    const urltitle = url.origUrl
+                    foundUrls.push(urltitle)
                 })
-            }
 
+                if (foundUrls.includes(origUrl)) {
+                    req.flash("urlFail", "! This url already exists.")
+                    res.redirect("/api/shortify/history")
+                }
+
+                else {
+
+                    const newUrl = await urlService.post({
+                        urlId: urlId,
+                        origUrl: origUrl,
+                        shortUrl: `${BaseUrl}/${urlId}`,
+                        historyUrl: `https://tittle.onrender.com/${urlId}`,
+                        User: user._id,
+                        createdAt: new Date(),
+                    });
+                    const savedUrl = await newUrl.save();
+
+                    if (process.env.NODE_ENV !== 'test') {
+                        const cacheKey = req.originalUrl;
+                        Cache.redis.set(cacheKey, JSON.stringify(savedUrl));
+                      }
+
+                    user.URLS = user.URLS.concat(savedUrl.shortUrl);
+                    await user.save();
+
+                    const resultLink = savedUrl.urlId;
+                    const resultText = savedUrl.historyUrl;
+                    const qrresult = savedUrl.historyUrl;
+
+                    QRCode.toDataURL(qrresult, (err, src) => {
+                        if (err) res.send("Error occurred");
+                        res.render("result", {
+                            user: req.User,
+                            linkUrl: resultLink,
+                            textUrl: resultText,
+                            qrcode: src
+                        });
+                    })
+                }
+            }
 
         } catch (err) {
             next(err)
