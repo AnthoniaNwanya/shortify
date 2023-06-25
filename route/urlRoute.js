@@ -5,7 +5,11 @@ const {authenticateUser} = require("../middleware/authentication");
 const GetCache = require('../middleware/cache');
 
 router.post("/", authenticateUser, controller.post);
-router.get("/history", GetCache, authenticateUser, controller.urlHistory);
+if (process.env.NODE_ENV === 'test') {
+    router.get("/history",  authenticateUser, controller.urlHistory);
+    router.get("/analytics", authenticateUser, controller.urlAnalytics);
+  }
+router.get("/history", GetCache,  authenticateUser, controller.urlHistory);
 router.get("/analytics", GetCache, authenticateUser, controller.urlAnalytics);
 
 module.exports = router;
