@@ -1,15 +1,9 @@
 const { NotFoundError, ValidationError, ForbiddenError } = require("../middleware/Error");
 const UrlSchema = require("../schema/UrlSchema");
-const {isValidHttpUrl} = require("../middleware/validateUrl");
 
 const post = async (urldata) => {
-    const initialUrl = urldata.origUrl;
-    if (isValidHttpUrl(initialUrl) !== true) {
-        throw new ForbiddenError("Invalid URL. Enter a valid URL.")
-    } else {
         const createUrl = await UrlSchema.create(urldata);
         return createUrl
-    }
 };
 
 const redirectLink = async (urlId, ipAddress) => {
