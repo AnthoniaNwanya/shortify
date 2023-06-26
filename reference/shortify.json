@@ -649,75 +649,56 @@
   "components": {
     "schemas": {
       "User": {
-        "title": "User",
         "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "URLS": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "x-examples": {
+          "Example 1": {
+            "_id": "64919bbe9d3654b7d6402d15",
+            "username": "Test User",
+            "email": "test@yahoo.com",
+            "URLS": [
+              "http://localhost:8000/9ePLm",
+              "http://localhost:8000/-NkC2"
+            ],
+            "createdAt": "Tue Jun 20 2023 13:29:50 GMT+0100 (West Africa Standard Time)",
+            "updatedAt": "Tue Jun 20 2023 13:29:50 GMT+0100 (West Africa Standard Time)"
+          }
+        },
+        "description": "User schema",
         "examples": [
           {
-            "id": 142,
-            "firstName": "Alice",
-            "lastName": "Smith",
-            "email": "alice.smith@gmail.com",
-            "dateOfBirth": "1997-10-31",
-            "emailVerified": true,
-            "signUpDate": "2019-08-24"
-          }
-        ],
-        "x-stoplight": {
-          "id": "33mo47lj58gnd"
-        },
-        "description": "User Schema",
-        "properties": {
-          "id": {
-            "type": "object",
-            "x-stoplight": {
-              "id": "ce7c71oepa9dw"
-            },
-            "required": [
-              "username",
-              "email",
-              "password"
+            "_id": "string",
+            "username": "string",
+            "email": "string",
+            "URLS": [
+              "string"
             ],
-            "properties": {
-              "username": {
-                "type": "string",
-                "x-stoplight": {
-                  "id": "4ui5aufzefnb8"
-                }
-              },
-              "email": {
-                "type": "string",
-                "x-stoplight": {
-                  "id": "cz9ewf8d2zzfy"
-                }
-              },
-              "password": {
-                "type": "string",
-                "x-stoplight": {
-                  "id": "7zppiwag5k9ai"
-                }
-              },
-              "URLS": {
-                "type": "array",
-                "x-stoplight": {
-                  "id": "xd9228ribthgv"
-                },
-                "items": {}
-              },
-              "createdAt": {
-                "type": "string",
-                "x-stoplight": {
-                  "id": "lbtja009xxtpo"
-                }
-              },
-              "updatedAt": {
-                "type": "string",
-                "x-stoplight": {
-                  "id": "gmyt4tb74a4ay"
-                }
-              }
-            }
+            "createdAt": "string",
+            "updatedAt": "string"
           }
-        }
+        ]
       },
       "Url": {
         "title": "Url",
