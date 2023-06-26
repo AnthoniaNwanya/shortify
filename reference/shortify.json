@@ -72,8 +72,7 @@
     },
     "/api/user": {
       "get": {
-        "summary": "Get Users",
-        "tags": [],
+        "summary": "Get All Users",
         "responses": {
           "200": {
             "description": "OK",
@@ -323,7 +322,6 @@
     "/api/user/{email}": {
       "get": {
         "summary": "Get One",
-        "tags": [],
         "responses": {
           "200": {
             "description": "OK",
@@ -432,7 +430,7 @@
     },
     "/api/user/update/": {
       "put": {
-        "summary": "",
+        "summary": "Update One",
         "operationId": "put-api-user-update",
         "responses": {
           "200": {
@@ -581,8 +579,7 @@
     },
     "/api/shortify/history": {
       "get": {
-        "summary": "Your GET endpoint",
-        "tags": [],
+        "summary": "Get Url History",
         "responses": {
           "302": {
             "description": "Redirecting to / urlHistory.ejs\n"
@@ -605,8 +602,10 @@
     },
     "/api/shortify/analytics": {
       "get": {
-        "summary": "Your GET endpoint",
-        "tags": [],
+        "summary": "Get Url Analytics",
+        "tags": [
+          "Url endpoints"
+        ],
         "responses": {
           "302": {
             "description": "Redirecting to / analytics.ejs"
@@ -766,21 +765,6 @@
             "required": [
               "origUrl"
             ]
-          }
-        }
-      },
-      "User-Model": {
-        "title": "User-Model",
-        "x-stoplight": {
-          "id": "audnkvnwfjdi9"
-        },
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "x-stoplight": {
-              "id": "ow6hk5pfeo6ai"
-            }
           }
         }
       }
