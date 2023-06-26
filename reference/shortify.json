@@ -41,7 +41,10 @@
             }
           },
           "description": "{\n\"username\": \"Teeya\",\n\"email\": \"tonianwanya@yahoo.com\",\n\"password\": \"Teeya22.\"\n\n}"
-        }
+        },
+        "tags": [
+          "User endpoints"
+        ]
       },
       "parameters": []
     },
@@ -67,7 +70,10 @@
           },
           "description": "{\n\"email\": \"tonianwanya@yahoo.com\",\n\"password\": \"teeya22@\"\n}"
         },
-        "parameters": []
+        "parameters": [],
+        "tags": [
+          "User endpoints"
+        ]
       }
     },
     "/api/user": {
@@ -316,7 +322,10 @@
           }
         },
         "operationId": "get-users",
-        "description": "Get all users "
+        "description": "Get all users ",
+        "tags": [
+          "User endpoints"
+        ]
       }
     },
     "/api/user/{email}": {
@@ -414,6 +423,9 @@
             "description": "User email",
             "required": true
           }
+        ],
+        "tags": [
+          "User endpoints"
         ]
       },
       "parameters": [
@@ -485,7 +497,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "User endpoints"
+        ]
       }
     },
     "/api/user/delete/{id}": {
@@ -528,6 +543,9 @@
             "description": "User id",
             "required": true
           }
+        ],
+        "tags": [
+          "User endpoints"
         ]
       }
     },
@@ -596,6 +614,9 @@
             "name": "token",
             "description": "Authentication token"
           }
+        ],
+        "tags": [
+          "Url endpoints"
         ]
       },
       "parameters": []
