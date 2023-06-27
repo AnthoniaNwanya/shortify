@@ -98,8 +98,10 @@
                                 </td>
                                 <td data-label="your clicks"> &nbsp; &nbsp; <%= url[i].clicks%>
                                 </td>
-                                <td data-label="who clicked?"> &nbsp; &nbsp; <%= url[i].clicker%>
+                                <% url[i].clicker.forEach(function(clicker){ %>
+                                <td data-label="who clicked?"> &nbsp; &nbsp; <%= clicker%>
                                 </td>
+                                <% }) %>
                             </tr>
                         </tbody>
                         <% } %>
