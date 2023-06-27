@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Schema.ObjectId;
+const validator = require('validator')
+const bcrypt = require('bcryptjs');
+const { ValidationError } = require("../middleware/Error");
 
 const UserSignupSchema = new mongoose.Schema({
   id: ObjectId,
@@ -12,6 +15,11 @@ const UserSignupSchema = new mongoose.Schema({
     required: [true, "can't be blank"],
     unique: true,
     lowercase: true,
+    validate(value){
+      if(!validator.isEmail(value)){
+          throw new ValidationError('Email is invalid')
+      }
+  }
   },
   password: {
     type: String,
@@ -30,5 +38,14 @@ const UserSignupSchema = new mongoose.Schema({
     type: String,
   },
 });
+
+//Hash the plain text password before saving 
+UserSignupSchema.pre('save', async function (next){
+  const user = this
+  if(user.isDirectModified('password')){
+      user.password = await bcrypt.hash(user.password,8)
+  }
+  next()
+})
 
 module.exports = mongoose.model("User", UserSignupSchema);

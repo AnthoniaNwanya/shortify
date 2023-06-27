@@ -24,7 +24,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(rateLimit)
+app.use(rateLimit);
 const whitelist = [
   "https://tittle.onrender.com",
   "https://tittle.stoplight.io",
