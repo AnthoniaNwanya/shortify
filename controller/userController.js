@@ -3,6 +3,7 @@ const UserSchema = require("../schema/UserSchema");
 const formatResponse = require("../middleware/Response");
 const { ForbiddenError } = require("../middleware/Error");
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcryptjs');
 const Cache = require('../config/redis');
 
 module.exports = {
@@ -39,12 +40,16 @@ module.exports = {
   login: async (req, res, next) => {
     try {
       const { email, password } = req.body;
-      const existingUser = await UserSchema.findOne({ "email": email, "password": password });
-
-      if (!existingUser) {
-        req.flash("loginFail", "! User does not exist. Cross-check email or password")
+      const existingUser = await UserSchema.findOne({ "email": email});
+      if (!existingUser ) {
+        req.flash("loginFail", "! User does not exist.")
         res.redirect("/login")
       } else {
+        const isMatch = await bcrypt.compare(password, existingUser.password)
+        if (!isMatch ) {
+          req.flash("loginFail", "! Password is incorrect.")
+         return res.redirect("/login")
+        }
         const signWith = { id: existingUser._id, username: existingUser.username, email: existingUser.email, password: existingUser.password };
         const token = jwt.sign(signWith, process.env.TOKEN_KEY, { expiresIn: "1h" });
         res.cookie("token", token, {
