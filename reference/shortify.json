@@ -30,17 +30,48 @@
             "content": {}
           }
         },
-        "description": "Create user account",
+        "description": "This path creates user account",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {}
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "4gl9sun6m3d8m"
+                    }
+                  },
+                  "email": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "2s9ghb9p52zha"
+                    }
+                  },
+                  "password": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "k7jx8qnu01ptk"
+                    }
+                  },
+                  "cPassword": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "kevbelddki0cz"
+                    }
+                  }
+                },
+                "required": [
+                  "username",
+                  "email",
+                  "password",
+                  "cPassword"
+                ]
               }
             }
           },
-          "description": "{\n\"username\": \"Teeya\",\n\"email\": \"tonianwanya@yahoo.com\",\n\"password\": \"Teeya22.\"\n\n}"
+          "description": "{\n\"username\": \"Teeya\",\n\"email\": \"tonianwanya@yahoo.com\",\n\"password\": \"Teeya22.\",\n\"cPassword\": \"Teeya22.\"\n\n}"
         },
         "tags": [
           "User endpoints"
@@ -64,13 +95,39 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {}
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "7bl5donojlepa"
+                    }
+                  },
+                  "password": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "nv9ixui53l91c"
+                    }
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
               }
             }
           },
           "description": "{\n\"email\": \"tonianwanya@yahoo.com\",\n\"password\": \"teeya22@\"\n}"
         },
-        "parameters": [],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "cookie",
+            "description": "token authentication"
+          }
+        ],
         "tags": [
           "User endpoints"
         ]
@@ -410,7 +467,14 @@
         "operationId": "get-api-user-email",
         "description": "Get a single user",
         "requestBody": {
-          "content": {},
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
           "description": ""
         },
         "parameters": [
@@ -420,7 +484,7 @@
             },
             "in": "query",
             "name": "email",
-            "description": "User email",
+            "description": "user email",
             "required": true
           }
         ],
@@ -440,7 +504,7 @@
         }
       ]
     },
-    "/api/user/update/": {
+    "/api/user/update/{id}": {
       "put": {
         "summary": "Update One",
         "operationId": "put-api-user-update",
@@ -465,9 +529,9 @@
             "schema": {
               "type": "string"
             },
-            "in": "cookie",
-            "name": "token",
-            "description": "Authentication token",
+            "in": "header",
+            "name": "cookie",
+            "description": "token authentication",
             "required": true
           }
         ],
@@ -476,6 +540,13 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "x-examples": {
+                  "Example 1": {
+                    "username": "you",
+                    "email": "tonianwanya@yahoo.com",
+                    "password": "Twinkle22@"
+                  }
+                },
                 "properties": {
                   "username": {
                     "type": "string"
@@ -485,13 +556,12 @@
                   },
                   "password": {
                     "type": "string"
-                  }
-                },
-                "x-examples": {
-                  "Example 1": {
-                    "username": "you",
-                    "email": "tonianwanya@yahoo.com",
-                    "password": "Twinkle22@"
+                  },
+                  "cPassword": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "2fjbjs2hsbb37"
+                    }
                   }
                 }
               }
@@ -501,7 +571,17 @@
         "tags": [
           "User endpoints"
         ]
-      }
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
     },
     "/api/user/delete/{id}": {
       "parameters": [
@@ -529,18 +609,18 @@
             "schema": {
               "type": "string"
             },
-            "in": "cookie",
-            "name": "token",
-            "description": "Authentication token",
+            "in": "query",
+            "name": "id",
+            "description": "User id",
             "required": true
           },
           {
             "schema": {
               "type": "string"
             },
-            "in": "query",
-            "name": "id",
-            "description": "User id",
+            "in": "header",
+            "name": "cookie",
+            "description": "token authentication",
             "required": true
           }
         ],
@@ -576,10 +656,9 @@
             "schema": {
               "type": "string"
             },
-            "in": "cookie",
-            "name": "token",
-            "description": "Authentication token",
-            "required": true
+            "in": "header",
+            "name": "cookie",
+            "description": "token authentication"
           }
         ],
         "requestBody": {
@@ -587,7 +666,23 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {}
+                "properties": {
+                  "origUrl": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "g2vgy8daijrny"
+                    }
+                  },
+                  "customId": {
+                    "type": "string",
+                    "x-stoplight": {
+                      "id": "7r5pku4unpl1y"
+                    }
+                  }
+                },
+                "required": [
+                  "origUrl"
+                ]
               }
             }
           },
@@ -610,9 +705,9 @@
             "schema": {
               "type": "string"
             },
-            "in": "cookie",
-            "name": "token",
-            "description": "Authentication token"
+            "in": "header",
+            "name": "cookie",
+            "description": "token authentication"
           }
         ],
         "tags": [
@@ -638,9 +733,9 @@
             "schema": {
               "type": "string"
             },
-            "in": "cookie",
-            "name": "token",
-            "description": "Authentication token"
+            "in": "header",
+            "name": "cookie",
+            "description": "token authentication"
           }
         ]
       }
@@ -772,10 +867,15 @@
       }
     },
     "securitySchemes": {
-      "token": {
-        "name": "token",
+      "cookie": {
         "type": "apiKey",
-        "in": "cookie"
+        "in": "header",
+        "name": "jwt_token"
+      }
+    },
+    "requestBodies": {
+      "user-signup": {
+        "content": {}
       }
     }
   }
