@@ -13,9 +13,8 @@ describe('Url Route', () => {
 
     beforeAll(async () => {
         conn = await connect();
-        // await redisService.connect();
 
-        await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
+        await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456', cPassword: '123456' });
 
         const login = await request(app).post('/login')
             .send({
@@ -31,7 +30,6 @@ describe('Url Route', () => {
 
     afterAll(async () => {
         await conn.disconnect();
-        // await redisService.quit();
     })
 
     it('generate random shortened url', async () => {
@@ -54,7 +52,7 @@ describe('Url Route', () => {
 
     it('generate custom shortened url', async () => {
 
-        await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
+        await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456', cPassword: '123456'});
         const login = await request(app).post('/login')
             .send({
                 email: 'tonia@mail.com',
@@ -78,7 +76,7 @@ describe('Url Route', () => {
 
     it('should return "URL already exists" when already existing url is passed', async () => {
 
-        await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
+        await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456', cPassword: '123456' });
         const login = await request(app).post('/login')
             .send({
                 email: 'tonia@mail.com',
@@ -112,7 +110,7 @@ describe('Url Route', () => {
 
     it('should throw error when URL is invalid', async () => {
 
-        await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
+        await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456', cPassword: '123456'});
         const login = await request(app).post('/login')
             .send({
                 email: 'tonia@mail.com',
@@ -136,7 +134,7 @@ describe('Url Route', () => {
     });
 
     it('return url history of user', async () => {
-        const user = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
+        const user = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456', cPassword: '123456' });
         const BASE = process.env.BASE;
         const urlId = nanoid(5);
         await UrlSchema.create({
@@ -175,7 +173,7 @@ describe('Url Route', () => {
     });
 
     it('should redirect to original url onclick of shortened url', async () => {
-        const user = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
+        const user = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456', cPassword: '123456' });
 
         const login = await request(app)
             .post('/auth/login')

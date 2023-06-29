@@ -15,13 +15,12 @@ const UserSignupSchema = new mongoose.Schema({
     required: [true, "can't be blank"],
     unique: true,
     lowercase: true,
-    validate(value){
-      if(!validator.isEmail(value)){
-          throw new ValidationError('Email is invalid')
-      }
-  }
   },
   password: {
+    type: String,
+    required: [true, "can't be blank"],
+  },
+  cPassword: {
     type: String,
     required: [true, "can't be blank"],
   },
