@@ -24,6 +24,7 @@ describe('User Route', () => {
                 username: 'testname',
                 email: 'test@mail.com',
                 password: 'test123',
+                cPassword: 'test123',
             })
         expect(response.headers.location).toMatch("/login")
     });
@@ -35,6 +36,7 @@ describe('User Route', () => {
                 username: 'testname',
                 email: 'test@mail.com',
                 password: 'test123',
+                cPassword: 'test123',
             })
         const response = await request(app).post('/')
             .set('content-type', 'application/json')
@@ -56,6 +58,7 @@ describe('User Route', () => {
             username: 'testname',
             email: 'test@mail.com',
             password: 'test123',
+            cPassword: 'test123',
         });
         const response = await request(app).post('/login')
             .set('content-type', 'application/json')
@@ -75,6 +78,7 @@ describe('User Route', () => {
             username: 'testname',
             email: 'test@mail.com',
             password: 'test123',
+            cPassword: 'test123',
         });
         const response = await request(app).post('/login')
             .set('content-type', 'application/json')

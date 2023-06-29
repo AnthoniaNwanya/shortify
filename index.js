@@ -47,12 +47,12 @@ app.use(
       ttl: 60 * 60 * 24,
     }),
   }));
-
 app.use(cookieParser())
 app.use(express.static('public'));
 app.use(flash());
 app.set('views', path.join('views'))
 app.set('view engine', 'ejs');
+
 app.get('/', (req, res) => {
   res.render('signup', {
     signupFlash: req.flash('signupFail')

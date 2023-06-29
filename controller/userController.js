@@ -11,7 +11,7 @@ module.exports = {
   signup: async (req, res, next) => {
 
     try {
-      const { username, email, password } = req.body;
+      const { username, email, password, cPassword} = req.body;
       const existingUser = await UserSchema.findOne({ "email": email });
       if (existingUser) {
         req.flash("signupFail", "! Account with this email already exists.")
@@ -22,6 +22,7 @@ module.exports = {
           username: username,
           email: email,
           password: password,
+          cPassword: cPassword,
           createdAt: new Date(),
         });
         await newUser.save();
@@ -95,13 +96,14 @@ module.exports = {
 
   updateOne: async (req, res, next) => {
     const id = req.params.id;
-    const { username, email, password } = req.body;
+    const { username, email, password, cPassword } = req.body;
 
     try {
       await service.updateOne(id, {
         username: username,
         email: email,
         password: password,
+        cPassword: cPassword,
       });
       req.flash("updateSuccess", "Settings saved successfully!")
       res.redirect("/api/user/update/:id")

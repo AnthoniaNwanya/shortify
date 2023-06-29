@@ -9,7 +9,7 @@ describe('User Route', () => {
     
     beforeAll(async () => {
         conn = await connect();
-        const createuser = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456' });
+        const createuser = await UserSchema.create({ username: 'tonia', email: 'tonia@mail.com', password: '123456', cPassword: '123456'});
         user = createuser
     })
 
@@ -42,7 +42,7 @@ describe('User Route', () => {
     });
 
     it('should return a user by email', async () => {
-        const createUser = await UserSchema.create({ username: 'testname', email: 'test@mail.com', password: '1234567' });
+        const createUser = await UserSchema.create({ username: 'testname', email: 'test@mail.com', password: '1234567', cPassword: '1234567' });
         const response = await request(app).get('/api/user/' + createUser.email)
 
         expect(response.status).toBe(200);
@@ -66,6 +66,7 @@ describe('User Route', () => {
             username: 'testname',
             email: 'test@mail.com',
             password: 'test123',
+            cPassword: 'test123'
         });
         const userId = createUser._id.toString()
         const login = await request(app).post('/login')
@@ -93,6 +94,7 @@ describe('User Route', () => {
             username: 'deletetname',
             email: 'delete@mail.com',
             password: 'delete123',
+            cPassword: 'delete123'
         });
         const userId = createUser._id.toString()
         const login = await request(app).post('/login')

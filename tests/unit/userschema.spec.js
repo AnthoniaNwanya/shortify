@@ -6,6 +6,7 @@ const userData = {
   username: "Lou",
   email: "lou@gmail.com",
   password: "Lou1234#",
+  cPassword: "Lou1234#",
 };
 
 beforeAll(async () => {
