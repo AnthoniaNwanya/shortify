@@ -79,7 +79,7 @@ describe('User Route', () => {
             .send({
                 username: 'updatename',
                 email: 'update@mail.com',
-                password: 'update123',
+               
             })
             .set("Cookie", loginResponse)
             .redirects(0)

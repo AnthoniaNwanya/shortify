@@ -96,14 +96,12 @@ module.exports = {
 
   updateOne: async (req, res, next) => {
     const id = req.params.id;
-    const { username, email, password, cPassword } = req.body;
+    const { username, email, } = req.body;
 
     try {
       await service.updateOne(id, {
         username: username,
         email: email,
-        password: password,
-        cPassword: cPassword,
       });
       req.flash("updateSuccess", "Settings saved successfully!")
       res.redirect("/api/user/update/:id")
